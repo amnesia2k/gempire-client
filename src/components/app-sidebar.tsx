@@ -25,12 +25,12 @@ const menuItems = [
   },
   {
     title: "Products",
-    href: "/admin-products",
+    href: "/admin-product",
     icon: Package,
   },
   {
     title: "Orders",
-    href: "/admin-orders",
+    href: "/admin-order",
     icon: ShoppingBag,
   },
 ];
@@ -79,8 +79,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   className={isActive ? "bg-accent text-accent-foreground" : ""}
                 >
                   <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.title}</span>
+                    <item.icon className="text-[15px]" />
+                    <span className="text-[15px]">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

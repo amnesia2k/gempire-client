@@ -13,7 +13,11 @@ export async function middleware(req: NextRequest) {
   // console.log("Access token:", token);
 
   // 🛡️ non-admin can't route to /dashboard
-  if (pathname.startsWith("/admin-dashboard")) {
+  if (
+    pathname.startsWith("/admin-dashboard") ||
+    pathname.startsWith("/admin-product") ||
+    pathname.startsWith("/admin-order")
+  ) {
     if (!token) {
       console.log("No token found, redirecting...");
       return NextResponse.redirect(new URL("/dash-access", req.url));
