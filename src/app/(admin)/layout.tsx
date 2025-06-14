@@ -14,6 +14,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AdminProvider } from "../context/admin-context";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function AdminLayout({
   children,
@@ -24,7 +25,7 @@ export default function AdminLayout({
         <AppSidebar />
         <SidebarInset>
           {/* Header section (retained from the previous page component) */}
-          <header className="flex h-16 shrink-0 items-center gap-2">
+          <header className="flex h-16 shrink-0 items-center justify-between">
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator
@@ -43,6 +44,10 @@ export default function AdminLayout({
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
+            </div>
+
+            <div className="pr-5">
+              <ModeToggle />
             </div>
           </header>
 
