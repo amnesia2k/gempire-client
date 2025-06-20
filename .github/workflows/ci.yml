@@ -21,7 +21,7 @@ jobs:
       #     cache: "pnpm"
 
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: npm install -g pnpm && pnpm install
 
       - name: 🧹 Lint
         run: pnpm lint
