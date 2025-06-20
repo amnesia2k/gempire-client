@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Lora, Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
 import { QueryProvider } from "./utils/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -48,6 +49,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>

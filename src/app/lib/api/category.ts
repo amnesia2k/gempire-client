@@ -1,4 +1,3 @@
-// import "server-only";
 import { api } from "../axios";
 
 type Category = {
@@ -13,6 +12,12 @@ type GetCategoriesResponse = {
   data: Category[];
 };
 
+type CreateCategoryResponse = {
+  success: boolean;
+  message: string;
+  data: Category;
+};
+
 export const getAllCategories = async (): Promise<Category[]> => {
   const res = await api.get<GetCategoriesResponse>("/category");
 
@@ -21,4 +26,14 @@ export const getAllCategories = async (): Promise<Category[]> => {
   }
 
   return res.data.data;
+};
+
+export const createCategory = async (name: string) => {
+  const res = await api.post<CreateCategoryResponse>("/category", { name });
+
+  if (res.status !== 201) {
+    throw new Error("Failed to create category");
+  }
+
+  return res.data;
 };
