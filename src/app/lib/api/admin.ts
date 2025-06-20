@@ -3,6 +3,7 @@ import { api } from "../axios";
 type Login = {
   _id: string;
   owner: string;
+  token: string;
 };
 
 type LoginResponse = {
