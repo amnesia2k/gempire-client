@@ -42,10 +42,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const user = {
     name: admin?.owner ?? "Admin User",
-    avatar: "/placeholders/avatar.png", // you can swap with any placeholder service like https://i.pravatar.cc/150
+    // avatar: "/placeholders/avatar.png", // you can swap with any placeholder service like https://i.pravatar.cc/150
   };
 
-  console.log(admin?.owner, "admin owner");
+  // console.log(admin?.owner, "admin owner");
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -67,7 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="space-y-3 px-2">
           {menuItems.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -76,11 +76,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className={isActive ? "bg-accent text-accent-foreground" : ""}
+                  className={`px-5 py-5 ${isActive ? "bg-accent text-accent-foreground" : ""}`}
                 >
                   <Link href={item.href}>
-                    <item.icon className="text-[15px]" />
-                    <span className="text-[15px]">{item.title}</span>
+                    <item.icon className="text-[18px]" />
+                    <span className="text-[18px]">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
