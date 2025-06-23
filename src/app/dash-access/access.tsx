@@ -19,7 +19,11 @@ export default function Access() {
       {
         onSuccess: (data) => {
           if (data.success && data.valid) {
-            document.cookie = `token=${data.data.token} path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`;
+            const token = data.data.token;
+            const oneWeekInSeconds = 7 * 24 * 60 * 60;
+
+            document.cookie = `token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=strict`;
+
             router.push("/admin-dashboard");
           } else {
             alert("Invalid access code");

@@ -72,14 +72,14 @@ export const productColumns: ColumnDef<Product>[] = [
             <DropdownMenuItem asChild>
               <Link href={`/admin-product/${product.slug}/edit`}>Edit</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={() => {
                 // ideally trigger modal or toast confirm here
                 alert(`Deleting ${product.name} (not implemented yet 😅)`);
               }}
             >
               Delete
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

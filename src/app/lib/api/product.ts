@@ -1,6 +1,7 @@
 import { api } from "../axios";
 
 export type Category = {
+  _id: string;
   name: string;
   slug: string;
 };
@@ -40,14 +41,29 @@ type GetProductResponse = {
   data: Product;
 };
 
-export const getAllProducts = async (): Promise<Product[]> => {
-  const res = await api.get<GetAllProductsResponse>("/product");
+type DeleteResponse = {
+  success: boolean;
+  message: string;
+};
 
-  if (res.status !== 200) {
-    throw new Error("Failed to fetch products");
+export const getAllProducts = async (): Promise<Product[]> => {
+  const res = await api.get<GetAllProductsResponse>("/products");
+
+  if (res.data?.success) {
+    return res.data.data;
   }
 
-  return res.data.data;
+  throw new Error(res.data?.message || "Something went wrong");
+};
+
+export const getProductBySlug = async (slug: string): Promise<Product> => {
+  const res = await api.get<GetProductResponse>(`/product/${slug}`);
+
+  if (res.data?.success) {
+    return res.data.data;
+  }
+
+  throw new Error(res.data?.message || "Something went wrong");
 };
 
 export const createProduct = async (formData: FormData) => {
@@ -57,15 +73,44 @@ export const createProduct = async (formData: FormData) => {
     },
   });
 
-  return res.data.data;
-};
-
-export const getProductBySlug = async (slug: string): Promise<Product> => {
-  const res = await api.get<GetProductResponse>(`/product/${slug}`);
-
-  if (res.status !== 200) {
-    throw new Error("Failed to fetch products");
+  if (res.data?.success) {
+    return res.data.data;
   }
 
-  return res.data.data;
+  throw new Error(res.data?.message || "Something went wrong");
 };
+
+export const editProduct = async (
+  slug: string,
+  formData: FormData,
+): Promise<Product> => {
+  const res = await api.patch<GetProductResponse>(
+    `/product/${slug}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+
+  if (res.data?.success) {
+    return res.data.data;
+  }
+
+  throw new Error(res.data?.message || "Failed to update product");
+};
+
+export const deleteProduct = async (id: string): Promise<string> => {
+  const res = await api.delete<DeleteResponse>(`/product/${id}`);
+
+  if (res.data?.success) {
+    return res.data.message;
+  }
+
+  throw new Error(res.data?.message || "Failed to delete product");
+};
+
+// if (res.status !== 200) {
+//   throw new Error("Failed to fetch products");
+// }

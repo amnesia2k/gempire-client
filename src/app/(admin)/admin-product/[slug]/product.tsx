@@ -1,6 +1,6 @@
 "use client";
 
-import { useProductBySlug } from "@/app/lib/hooks/useProduct";
+import { useDeleteProduct, useProductBySlug } from "@/app/lib/hooks/useProduct";
 import DashHeader from "@/components/dash-header";
 import Loader from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
@@ -12,16 +12,38 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cloudinaryBlur } from "@/lib/utils";
-import { Edit, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 export default function Product() {
   const { slug } = useParams();
   const productSlug = typeof slug === "string" ? slug : undefined;
 
   const { data, isLoading, error } = useProductBySlug(productSlug);
+
+  const { mutate: deleteProduct, isPending } = useDeleteProduct();
+  const router = useRouter();
+
+  const handleDelete = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?",
+    );
+    if (!confirmed || !data?._id) return;
+
+    deleteProduct(data._id, {
+      onSuccess: () => {
+        toast.success("Product deleted successfully!");
+        router.push("/admin-product"); // Change this to wherever the product list is
+      },
+      onError: (err) => {
+        toast.error(err.message || "Failed to delete product");
+      },
+    });
+  };
 
   if (isLoading) return <Loader />;
   if (error) return <p>Error loading product</p>;
@@ -39,17 +61,20 @@ export default function Product() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem>
-              {" "}
+            <DropdownMenuItem asChild>
               {/* onClick={handleEdit} */}
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit Product
+              <Link href={`/admin-product/${data.slug}/edit`}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit Product
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600 focus:text-red-700">
-              {" "}
-              {/* onClick={handleDelete} */}
+            <DropdownMenuItem
+              onClick={handleDelete}
+              disabled={isPending}
+              className="text-red-600 focus:text-red-700"
+            >
               <Trash2 className="mr-2 h-4 w-4" />
-              Delete Product
+              {isPending ? "Deleting..." : "Delete Product"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

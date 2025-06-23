@@ -23,6 +23,12 @@ export type Admin = {
   owner: string;
 };
 
+export type AdminResponse = {
+  message: string;
+  success: boolean;
+  data: Admin;
+};
+
 export const loginAdmin = async ({ code }: { code: string }) => {
   const res = await api.post<LoginResponse>("/login", { code });
 
@@ -44,11 +50,7 @@ export const logoutAdmin = async () => {
 };
 
 export const getAdmin = async () => {
-  const res = await api.get<{
-    message: string;
-    success: boolean;
-    data: Admin;
-  }>("/admin");
+  const res = await api.get<AdminResponse>("/admin");
 
   if (res.status !== 200) {
     throw new Error("Failed to fetch admin data");

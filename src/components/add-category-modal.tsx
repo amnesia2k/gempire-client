@@ -27,14 +27,14 @@ export const AddCategoryModal = () => {
     if (!name.trim()) return;
 
     mutate(name, {
-      onSuccess: () => {
+      onSuccess: (category) => {
         setName("");
         setOpen(false);
-        toast.success("Category created 🎉");
+        toast.success(category.message || "Category created 🎉");
       },
-      onError: (err) => {
-        toast.error("Failed to create category: " + err.message);
-        console.error(err);
+      onError: (error) => {
+        toast.error(error.message || "Something went wrong");
+        console.error(error);
       },
     });
   };
@@ -59,7 +59,7 @@ export const AddCategoryModal = () => {
             placeholder="Category name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
+            // required
           />
           <DialogFooter>
             <Button
