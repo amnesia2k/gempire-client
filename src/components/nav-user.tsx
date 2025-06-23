@@ -36,6 +36,8 @@ export function NavUser({
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: () => {
+        document.cookie = "token=; path=/; max-age=0; secure; samesite=strict";
+
         router.push("/"); // or "/" depending on your routing
       },
       onError: (error) => {
