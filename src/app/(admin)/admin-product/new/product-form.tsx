@@ -20,6 +20,11 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+/**
+ * Renders a form for creating a new product, including fields for name, category, price, unit, description, and up to five images.
+ *
+ * Handles image selection with preview and removal, validates image count, and submits the form data to create a product. On successful creation, resets the form and navigates to the new product's admin page.
+ */
 export default function ProductForm() {
   const { data: categories, isLoading: loadingCategories } = useCategories();
   const { mutate, isPending } = useCreateProduct();
