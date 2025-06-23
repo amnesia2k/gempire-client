@@ -36,13 +36,11 @@ export function NavUser({
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: () => {
-        document.cookie = "token=; path=/; max-age=0; secure; samesite=strict";
-
-        router.push("/"); // or "/" depending on your routing
+        document.cookie = "token=; path=/; max-age=0";
+        router.push("/dash-access");
       },
-      onError: (error) => {
-        console.error("Logout failed:", error);
-        // Optionally show a toast or UI feedback
+      onError: () => {
+        alert("Logout failed");
       },
     });
   };

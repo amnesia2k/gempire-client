@@ -22,6 +22,7 @@ export default function Access() {
             const token = data.data.token;
             const oneWeekInSeconds = 7 * 24 * 60 * 60;
 
+            // 💡 FIXED: quotes and syntax
             document.cookie = `token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=strict`;
 
             router.push("/admin-dashboard");
@@ -29,6 +30,7 @@ export default function Access() {
             alert("Invalid access code");
           }
         },
+
         onError: () => {
           alert("Something went wrong during login.");
         },
