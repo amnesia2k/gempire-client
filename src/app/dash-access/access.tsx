@@ -22,8 +22,8 @@ export default function Access() {
             const token = data.data.token;
             const oneWeekInSeconds = 7 * 24 * 60 * 60;
 
-            // 💡 FIXED: quotes and syntax
-            document.cookie = `token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=strict`;
+            // ✅ Updated for prod-safe cookie
+            document.cookie = `token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=None`;
 
             router.push("/admin-dashboard");
           } else {
