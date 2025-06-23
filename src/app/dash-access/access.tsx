@@ -19,11 +19,11 @@ export default function Access() {
       {
         onSuccess: (data) => {
           if (data.success && data.valid) {
-            // const token = data.data.token;
-            // const oneWeekInSeconds = 7 * 24 * 60 * 60;
+            const token = data.data.token;
+            const oneWeekInSeconds = 7 * 24 * 60 * 60;
 
             // ✅ Updated for prod-safe cookie
-            // document.cookie = `token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=None`;
+            document.cookie = `admin-token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=None`;
 
             router.push("/admin-dashboard");
           } else {

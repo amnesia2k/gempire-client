@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
 
   const cookieStore = cookies();
 
-  const token = (await cookieStore).get("token")?.value;
+  const token = (await cookieStore).get("admin-token")?.value;
   // console.log("Access token:", token);
 
   // 🛡️ non-admin can't route to /dashboard
