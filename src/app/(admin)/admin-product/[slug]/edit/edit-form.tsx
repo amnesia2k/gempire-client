@@ -24,6 +24,13 @@ interface Props {
   slug: string;
 }
 
+/**
+ * Renders a form for editing an existing product, allowing updates to product details, category, and images.
+ *
+ * Displays the current product information, enables modification of fields such as name, price, unit, description, and category, and supports uploading new images or removing existing ones (up to five images total). On submission, updates the product and provides user feedback on success or failure.
+ *
+ * @param slug - The unique identifier for the product to edit
+ */
 export default function EditProductForm({ slug }: Props) {
   const { data: productData, isLoading } = useProductBySlug(slug);
   const { data: categories } = useCategories();

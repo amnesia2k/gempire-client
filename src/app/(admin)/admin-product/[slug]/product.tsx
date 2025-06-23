@@ -19,6 +19,11 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
+/**
+ * Displays detailed information for a product identified by its slug, including images, category, price, stock, and description.
+ *
+ * Provides options to edit or delete the product, with user confirmation and feedback for deletion actions. Handles loading, error, and empty states for product data.
+ */
 export default function Product() {
   const { slug } = useParams();
   const productSlug = typeof slug === "string" ? slug : undefined;

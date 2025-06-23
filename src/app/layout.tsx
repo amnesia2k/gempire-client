@@ -44,6 +44,13 @@ const raleway = Raleway({
   variable: "--text-family",
 });
 
+/**
+ * Root layout component that sets up global fonts, theme provider, query provider, and notification system for the application.
+ *
+ * Wraps all page content with context providers and applies global font styles and theming.
+ *
+ * @param children - The content to render within the layout
+ */
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

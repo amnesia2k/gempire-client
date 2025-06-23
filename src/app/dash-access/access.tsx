@@ -4,6 +4,11 @@ import { useLoginAdmin } from "../lib/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
+/**
+ * Renders a login form for admin access using an access code.
+ *
+ * On successful login, sets an authentication token cookie and redirects to the admin dashboard. Displays error messages for invalid codes or failed login attempts.
+ */
 export default function Access() {
   const [code, setCode] = useState("");
   const { mutate, isPending, isError, error } = useLoginAdmin();

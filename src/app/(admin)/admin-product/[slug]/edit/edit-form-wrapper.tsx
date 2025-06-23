@@ -3,6 +3,11 @@
 import { useParams } from "next/navigation";
 import EditProductForm from "./edit-form";
 
+/**
+ * Renders the edit product form for a product identified by the URL slug.
+ *
+ * Displays a loading message until the slug parameter is available, then renders the edit form with the slug.
+ */
 export default function EditProductWrapper() {
   const params = useParams();
 

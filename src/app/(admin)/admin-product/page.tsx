@@ -5,6 +5,11 @@ import Link from "next/link";
 import React from "react";
 import ProductTable from "./product-table";
 
+/**
+ * Renders the admin products page with a header, an "Add New Product" button, and a table of products.
+ *
+ * Displays a section containing a header, a button linking to the product creation page, and a server-rendered product table.
+ */
 export default function AdminProduct() {
   return (
     <section>
