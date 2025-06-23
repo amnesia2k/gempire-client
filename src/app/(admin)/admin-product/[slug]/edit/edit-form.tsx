@@ -1,7 +1,7 @@
 "use client";
 
 import { useCategories } from "@/app/lib/hooks/useCategory";
-import { useCreateProduct } from "@/app/lib/hooks/useProduct";
+import { useEditProduct, useProductBySlug } from "@/app/lib/hooks/useProduct";
 import { AddCategoryModal } from "@/components/add-category-modal";
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
@@ -17,17 +17,58 @@ import {
 import { Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function ProductForm() {
-  const { data: categories, isLoading: loadingCategories } = useCategories();
-  const { mutate, isPending } = useCreateProduct();
+interface Props {
+  slug: string;
+}
+
+export default function EditProductForm({ slug }: Props) {
+  const { data: productData, isLoading } = useProductBySlug(slug);
+  const { data: categories } = useCategories();
+  const { mutate, isPending } = useEditProduct();
   const router = useRouter();
 
   const [files, setFiles] = useState<FileList | null>(null);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState("");
+  const [formState, setFormState] = useState({
+    name: "",
+    price: "",
+    unit: "",
+    description: "",
+  });
+
+  const [existingImages, setExistingImages] = useState<
+    { _id: string; imageUrl: string }[]
+  >([]);
+
+  // 🧠 Initialize product data into form state
+  useEffect(() => {
+    if (productData) {
+      setFormState({
+        name: productData.name,
+        price: productData.price,
+        unit: productData.unit.toString(),
+        description: productData.description,
+      });
+      setExistingImages(productData.images || []);
+    }
+  }, [productData]);
+
+  // ✅ Set categoryId only after categories are loaded
+  useEffect(() => {
+    if (productData?.categoryId && (categories?.length ?? 0) > 0) {
+      const match = categories!.find(
+        (cat) => cat._id === productData.categoryId,
+      );
+      if (match) {
+        setCategoryId(match._id);
+      }
+    }
+  }, [productData?.categoryId, categories]);
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
@@ -36,7 +77,7 @@ export default function ProductForm() {
 
     if ((files?.length ?? 0) + selected.length > 5) {
       toast.error("You can only upload up to 5 images.");
-      input.value = ""; // reset to avoid ghost files
+      input.value = "";
       return;
     }
 
@@ -48,12 +89,11 @@ export default function ProductForm() {
     const newPreviews = selected.map((file) => URL.createObjectURL(file));
     setPreviewImages((prev) => [...prev, ...newPreviews]);
 
-    input.value = ""; // 💥 clears the input for future selections
+    input.value = "";
   };
 
   const removeImageAt = (index: number) => {
     if (!files) return;
-
     const updatedFiles = Array.from(files).filter((_, i) => i !== index);
     const dataTransfer = new DataTransfer();
     updatedFiles.forEach((f) => dataTransfer.items.add(f));
@@ -61,36 +101,51 @@ export default function ProductForm() {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const removeExistingImage = (id: string) => {
+    setDeletedImageIds((prev) => [...prev, id]);
+    setExistingImages((prev) => prev.filter((img) => img._id !== id));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isPending) return;
+    if (isPending || !productData) return;
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    formData.append("categoryId", categoryId);
+    deletedImageIds.forEach((id) => formData.append("deletedImageIds", id));
 
     if (files) {
       Array.from(files).forEach((file) => formData.append("files", file));
     }
 
-    formData.append("categoryId", categoryId);
-
-    // console.log("📦 Files being sent:", formData.getAll("files").map((f: string) => f.name));
-
-    mutate(formData, {
-      onSuccess: (createdProduct) => {
-        toast.success("Product created 🎉");
-        form.reset();
-        setFiles(null);
-        setPreviewImages([]);
-        setCategoryId("");
-        router.push(`/admin-product/${createdProduct.slug}`);
+    mutate(
+      {
+        slug: productData.slug,
+        formData,
       },
-      onError: (error) => {
-        toast.error(error.message || "Something went wrong");
-        console.error(error);
+      {
+        onSuccess: (updated) => {
+          toast.success("Product updated successfully!");
+          setDeletedImageIds([]);
+          setFiles(null);
+          setPreviewImages([]);
+          router.push(`/admin-product/${updated.slug}`);
+        },
+        onError: (err) => {
+          toast.error(err.message || "Failed to update product");
+        },
       },
-    });
+    );
   };
+
+  if (isLoading || !categories || !productData)
+    return <p>Loading product...</p>;
+
+  // console.log("Product:", productData);
+  // console.log("Categories:", categories);
+  // console.log("Current Category ID:", categoryId);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,6 +154,7 @@ export default function ProductForm() {
           label="Product Name"
           id="name"
           name="name"
+          defaultValue={formState.name}
           placeholder="Enter Product Name"
           required
           type="text"
@@ -106,27 +162,32 @@ export default function ProductForm() {
 
         <div className="space-y-3">
           <Label>Category</Label>
-          <Select
-            value={categoryId}
-            onValueChange={(val) => setCategoryId(val)}
-            required
-          >
-            <SelectTrigger className="w-full p-5">
-              <SelectValue placeholder="Choose a Category" />
-            </SelectTrigger>
-            <SelectContent>
-              {loadingCategories ? (
-                <div className="text-muted-foreground p-2">Loading...</div>
-              ) : (
-                categories?.map((cat) => (
-                  <SelectItem key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </SelectItem>
-                ))
-              )}
-              <AddCategoryModal />
-            </SelectContent>
-          </Select>
+
+          {categories && categories.length > 0 ? (
+            categoryId ? (
+              <Select value={categoryId} onValueChange={setCategoryId} required>
+                <SelectTrigger className="w-full p-5">
+                  <SelectValue placeholder="Choose a Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                  <AddCategoryModal />
+                </SelectContent>
+              </Select>
+            ) : (
+              <p className="text-muted-foreground italic">
+                Loading category...
+              </p>
+            )
+          ) : (
+            <p className="text-muted-foreground italic">
+              Fetching categories...
+            </p>
+          )}
         </div>
       </div>
 
@@ -135,15 +196,16 @@ export default function ProductForm() {
           label="Price"
           id="price"
           name="price"
+          defaultValue={formState.price}
           placeholder="e.g., 4000"
           required
           type="number"
         />
-
         <FormField
           label="Unit"
           id="unit"
           name="unit"
+          defaultValue={formState.unit}
           placeholder="e.g., 100"
           required
           type="number"
@@ -154,6 +216,7 @@ export default function ProductForm() {
         label="Product Description"
         id="description"
         name="description"
+        defaultValue={formState.description}
         placeholder="Enter Product Description"
         required
         variant="textarea"
@@ -162,9 +225,30 @@ export default function ProductForm() {
       <div>
         <Label>Product Images</Label>
         <div className="scrollbar-thin scrollbar-thumb-muted mt-2 flex gap-4 overflow-x-auto">
+          {existingImages.map((img, index) => (
+            <div
+              key={img._id}
+              className="relative aspect-square w-full max-w-[160px] flex-shrink-0"
+            >
+              <Image
+                src={img.imageUrl}
+                alt={`existing-${index}`}
+                fill
+                className="rounded-md border object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => removeExistingImage(img._id)}
+                className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white"
+              >
+                <Trash className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+
           {previewImages.map((src, index) => (
             <div
-              key={index}
+              key={src}
               className="relative aspect-square w-full max-w-[160px] flex-shrink-0"
             >
               <Image
@@ -176,14 +260,14 @@ export default function ProductForm() {
               <button
                 type="button"
                 onClick={() => removeImageAt(index)}
-                className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white opacity-100"
+                className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white"
               >
-                <Trash className="h-4 w-4 cursor-pointer" />
+                <Trash className="h-4 w-4" />
               </button>
             </div>
           ))}
 
-          {previewImages.length < 5 && (
+          {existingImages.length + previewImages.length < 5 && (
             <label
               htmlFor="files"
               className="text-muted-foreground relative flex aspect-square w-full max-w-[160px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm transition hover:border-gray-500 hover:text-gray-700"
@@ -207,13 +291,13 @@ export default function ProductForm() {
       </div>
 
       <Button
-        variant="default"
+        variant="outline"
         size="lg"
         type="submit"
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? "Creating..." : "Create Product"}
+        {isPending ? "Updating..." : "Update Product"}
       </Button>
     </form>
   );

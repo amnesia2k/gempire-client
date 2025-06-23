@@ -13,7 +13,7 @@ export default function AdminProduct() {
 
         <Button
           asChild
-          variant="outline"
+          variant="default"
           size="lg"
           className="text-foreground font-medium"
         >

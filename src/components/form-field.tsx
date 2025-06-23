@@ -10,6 +10,7 @@ type BaseProps = {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  defaultValue?: string | number;
 };
 
 type InputFieldProps = {
@@ -46,6 +47,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
           required={required}
           rows={rows}
           className="resize-none p-5"
+          defaultValue={props.defaultValue}
         />
       </div>
     );
@@ -63,6 +65,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         required={required}
         type={type}
         className="p-5"
+        defaultValue={props.defaultValue}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Lora, Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
+import { Poppins, Raleway } from "next/font/google";
 import { QueryProvider } from "./utils/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
@@ -17,19 +17,31 @@ export const metadata: Metadata = {
 //   variable: "--font-geist-sans",
 // });
 
-const jakarta = Plus_Jakarta_Sans({
+// const jakarta = Plus_Jakarta_Sans({
+//   subsets: ["latin"],
+//   variable: "--font-jakarta-sans",
+// });
+
+// const lora = Lora({
+//   subsets: ["latin"],
+//   variable: "--font-lora",
+// });
+
+// const roboto = Roboto_Mono({
+//   subsets: ["latin"],
+//   variable: "--font-roboto-mono",
+// });
+
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-jakarta-sans",
+  weight: ["500"],
+  variable: "--display-family",
 });
 
-const lora = Lora({
+const raleway = Raleway({
   subsets: ["latin"],
-  variable: "--font-lora",
-});
-
-const roboto = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-roboto-mono",
+  weight: ["400"],
+  variable: "--text-family",
 });
 
 export default function RootLayout({
@@ -39,7 +51,8 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${jakarta.variable} ${lora.variable} ${roboto.variable}`}
+        // className={`${jakarta.variable} ${lora.variable} ${roboto.variable}`}
+        className={`${poppins.variable} ${raleway.variable}`}
         suppressHydrationWarning
       >
         <body>
