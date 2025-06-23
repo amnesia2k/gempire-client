@@ -28,6 +28,7 @@ export default function ProductForm() {
   const [files, setFiles] = useState<FileList | null>(null);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
@@ -36,7 +37,7 @@ export default function ProductForm() {
 
     if ((files?.length ?? 0) + selected.length > 5) {
       toast.error("You can only upload up to 5 images.");
-      input.value = ""; // reset to avoid ghost files
+      input.value = "";
       return;
     }
 
@@ -48,12 +49,11 @@ export default function ProductForm() {
     const newPreviews = selected.map((file) => URL.createObjectURL(file));
     setPreviewImages((prev) => [...prev, ...newPreviews]);
 
-    input.value = ""; // 💥 clears the input for future selections
+    input.value = "";
   };
 
   const removeImageAt = (index: number) => {
     if (!files) return;
-
     const updatedFiles = Array.from(files).filter((_, i) => i !== index);
     const dataTransfer = new DataTransfer();
     updatedFiles.forEach((f) => dataTransfer.items.add(f));
@@ -74,8 +74,6 @@ export default function ProductForm() {
 
     formData.append("categoryId", categoryId);
 
-    // console.log("📦 Files being sent:", formData.getAll("files").map((f: string) => f.name));
-
     mutate(formData, {
       onSuccess: (createdProduct) => {
         toast.success("Product created 🎉");
@@ -87,134 +85,145 @@ export default function ProductForm() {
       },
       onError: (error) => {
         toast.error(error.message || "Something went wrong");
-        console.error(error);
       },
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-2">
-        <FormField
-          label="Product Name"
-          id="name"
-          name="name"
-          placeholder="Enter Product Name"
-          required
-          type="text"
-        />
-
-        <div className="space-y-3">
-          <Label>Category</Label>
-          <Select
-            value={categoryId}
-            onValueChange={(val) => setCategoryId(val)}
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-2">
+          <FormField
+            label="Product Name"
+            id="name"
+            name="name"
+            placeholder="Enter Product Name"
             required
-          >
-            <SelectTrigger className="w-full p-5">
-              <SelectValue placeholder="Choose a Category" />
-            </SelectTrigger>
-            <SelectContent>
-              {loadingCategories ? (
-                <div className="text-muted-foreground p-2">Loading...</div>
-              ) : (
-                categories?.map((cat) => (
-                  <SelectItem key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </SelectItem>
-                ))
-              )}
-              <AddCategoryModal />
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+            type="text"
+          />
 
-      <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-2">
-        <FormField
-          label="Price"
-          id="price"
-          name="price"
-          placeholder="e.g., 4000"
-          required
-          type="number"
-        />
-
-        <FormField
-          label="Unit"
-          id="unit"
-          name="unit"
-          placeholder="e.g., 100"
-          required
-          type="number"
-        />
-      </div>
-
-      <FormField
-        label="Product Description"
-        id="description"
-        name="description"
-        placeholder="Enter Product Description"
-        required
-        variant="textarea"
-      />
-
-      <div>
-        <Label>Product Images</Label>
-        <div className="scrollbar-thin scrollbar-thumb-muted mt-2 flex gap-4 overflow-x-auto">
-          {previewImages.map((src, index) => (
-            <div
-              key={index}
-              className="relative aspect-square w-full max-w-[160px] flex-shrink-0"
+          <div className="space-y-3">
+            <Label>Category</Label>
+            <Select
+              value={categoryId}
+              onValueChange={(val) => {
+                if (val === "__new__") {
+                  setShowModal(true);
+                } else {
+                  setCategoryId(val);
+                }
+              }}
+              required
             >
-              <Image
-                src={src}
-                alt={`preview-${index}`}
-                fill
-                className="rounded-md border object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => removeImageAt(index)}
-                className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white opacity-100"
+              <SelectTrigger className="w-full p-5">
+                <SelectValue placeholder="Choose a Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {loadingCategories ? (
+                  <div className="text-muted-foreground p-2">Loading...</div>
+                ) : (
+                  categories?.map((cat) => (
+                    <SelectItem key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))
+                )}
+                <SelectItem value="__new__">
+                  <Plus className="mr-1 inline-block h-3 w-3" />
+                  Add New Category
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-2">
+          <FormField
+            label="Price"
+            id="price"
+            name="price"
+            placeholder="e.g., 4000"
+            required
+            type="number"
+          />
+          <FormField
+            label="Unit"
+            id="unit"
+            name="unit"
+            placeholder="e.g., 100"
+            required
+            type="number"
+          />
+        </div>
+
+        <FormField
+          label="Product Description"
+          id="description"
+          name="description"
+          placeholder="Enter Product Description"
+          required
+          variant="textarea"
+        />
+
+        <div>
+          <Label>Product Images</Label>
+          <div className="scrollbar-thin scrollbar-thumb-muted mt-2 flex gap-4 overflow-x-auto">
+            {previewImages.map((src, index) => (
+              <div
+                key={index}
+                className="relative aspect-square w-full max-w-[160px] flex-shrink-0"
               >
-                <Trash className="h-4 w-4 cursor-pointer" />
-              </button>
-            </div>
-          ))}
+                <Image
+                  src={src}
+                  alt={`preview-${index}`}
+                  fill
+                  className="rounded-md border object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImageAt(index)}
+                  className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white opacity-100"
+                >
+                  <Trash className="h-4 w-4 cursor-pointer" />
+                </button>
+              </div>
+            ))}
 
-          {previewImages.length < 5 && (
-            <label
-              htmlFor="files"
-              className="text-muted-foreground relative flex aspect-square w-full max-w-[160px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm transition hover:border-gray-500 hover:text-gray-700"
-            >
-              <Plus size={50} />
-              <Input
-                type="file"
-                id="files"
-                name="files"
-                accept="image/*"
-                multiple
-                onChange={handleFilesChange}
-                className="absolute inset-0 cursor-pointer opacity-0"
-              />
-            </label>
-          )}
+            {previewImages.length < 5 && (
+              <label
+                htmlFor="files"
+                className="text-muted-foreground relative flex aspect-square w-full max-w-[160px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm transition hover:border-gray-500 hover:text-gray-700"
+              >
+                <Plus size={50} />
+                <Input
+                  type="file"
+                  id="files"
+                  name="files"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFilesChange}
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                />
+              </label>
+            )}
+          </div>
+          <p className="text-muted-foreground mt-2 text-sm">
+            Upload up to 5 images. Click a preview to remove.
+          </p>
         </div>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Upload up to 5 images. Click a preview to remove.
-        </p>
-      </div>
 
-      <Button
-        variant="default"
-        size="lg"
-        type="submit"
-        className="w-full"
-        disabled={isPending}
-      >
-        {isPending ? "Creating..." : "Create Product"}
-      </Button>
-    </form>
+        <Button
+          variant="default"
+          size="lg"
+          type="submit"
+          className="w-full"
+          disabled={isPending}
+        >
+          {isPending ? "Creating..." : "Create Product"}
+        </Button>
+      </form>
+
+      <AddCategoryModal open={showModal} setOpen={setShowModal} />
+    </>
   );
 }
