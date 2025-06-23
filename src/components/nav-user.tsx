@@ -36,7 +36,7 @@ export function NavUser({
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: () => {
-        // document.cookie = "token=; path=/; max-age=0";
+        document.cookie = "admin-token=; path=/; max-age=0";
         router.push("/dash-access");
       },
       onError: () => {
