@@ -1,22 +1,9 @@
 import { api } from "../axios";
-
-type Category = {
-  _id: string;
-  name: string;
-  slug: string;
-};
-
-type GetCategoriesResponse = {
-  success: boolean;
-  message: string;
-  data: Category[];
-};
-
-type CreateCategoryResponse = {
-  success: boolean;
-  message: string;
-  data: Category;
-};
+import type {
+  Category,
+  CreateCategoryResponse,
+  GetCategoriesResponse,
+} from "../types";
 
 export const getAllCategories = async (): Promise<Category[]> => {
   const res = await api.get<GetCategoriesResponse>("/categories");

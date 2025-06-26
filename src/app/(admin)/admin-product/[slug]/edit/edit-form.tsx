@@ -1,7 +1,7 @@
 "use client";
 
-import { useCategories } from "@/app/lib/hooks/useCategory";
-import { useEditProduct, useProductBySlug } from "@/app/lib/hooks/useProduct";
+import { useCategories } from "@/lib/hooks/useCategory";
+import { useEditProduct, useProductBySlug } from "@/lib/hooks/useProduct";
 import { AddCategoryModal } from "@/components/add-category-modal";
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import Loader from "@/components/loader";
 
 interface Props {
   slug: string;
@@ -131,7 +132,7 @@ export default function EditProductForm({ slug }: Props) {
   };
 
   if (isLoading || !categories || !productData) {
-    return <p>Loading product...</p>;
+    return <Loader />;
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
-import { useCategories } from "@/app/lib/hooks/useCategory";
-import { useCreateProduct } from "@/app/lib/hooks/useProduct";
+import { useCategories } from "@/lib/hooks/useCategory";
+import { useCreateProduct } from "@/lib/hooks/useProduct";
 import { AddCategoryModal } from "@/components/add-category-modal";
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";

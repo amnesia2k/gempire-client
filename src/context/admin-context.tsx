@@ -1,8 +1,8 @@
 "use client";
 
-import { useGetAdmin } from "@/lib/hooks/useAdmin";
-import type { Admin } from "@/lib/types";
 import { createContext, useContext } from "react";
+import { useGetAdmin } from "../lib/hooks/useAdmin";
+import type { Admin } from "@/lib/types";
 
 type AdminContextType = {
   admin: Admin | null;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCategories } from "@/app/lib/hooks/useCategory";
+import { useCategories } from "@/lib/hooks/useCategory";
 import React from "react";
 
 export default function Done() {
