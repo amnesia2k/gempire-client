@@ -1,6 +1,6 @@
 "use client";
 
-import { useLoginAdmin } from "../lib/hooks/useAdmin";
+import { useLoginAdmin } from "../../lib/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 

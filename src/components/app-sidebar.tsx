@@ -15,7 +15,7 @@ import {
 import { NavUser } from "@/components/nav-user";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAdmin } from "@/app/context/admin-context";
+import { useAdmin } from "@/context/admin-context";
 
 const menuItems = [
   {

@@ -1,50 +1,10 @@
 import { api } from "../axios";
-
-export type Category = {
-  _id: string;
-  name: string;
-  slug: string;
-};
-
-export type ProductImage = {
-  _id: string;
-  imageUrl: string;
-  blurUrl: string;
-  productId: string;
-  createdAt: string;
-};
-
-export type Product = {
-  _id: string;
-  productId: string;
-  name: string;
-  slug: string;
-  description: string;
-  price: string;
-  unit: number;
-  categoryId: string;
-  createdAt: string;
-  updatedAt: string;
-  images: ProductImage[];
-  category: Category | null;
-};
-
-type GetAllProductsResponse = {
-  success: boolean;
-  message: string;
-  data: Product[];
-};
-
-type GetProductResponse = {
-  success: boolean;
-  message: string;
-  data: Product;
-};
-
-type DeleteResponse = {
-  success: boolean;
-  message: string;
-};
+import type {
+  DeleteResponse,
+  GetAllProductsResponse,
+  GetProductResponse,
+  Product,
+} from "../types";
 
 export const getAllProducts = async (): Promise<Product[]> => {
   const res = await api.get<GetAllProductsResponse>("/products");

@@ -1,33 +1,5 @@
 import { api } from "../axios";
-
-type Login = {
-  _id: string;
-  owner: string;
-  token: string;
-};
-
-type LoginResponse = {
-  message: string;
-  success: boolean;
-  valid: boolean;
-  data: Login;
-};
-
-type LogoutResponse = {
-  message: string;
-  success: boolean;
-};
-
-export type Admin = {
-  _id: string;
-  owner: string;
-};
-
-export type AdminResponse = {
-  message: string;
-  success: boolean;
-  data: Admin;
-};
+import type { AdminResponse, LoginResponse, LogoutResponse } from "../types";
 
 export const loginAdmin = async ({ code }: { code: string }) => {
   const res = await api.post<LoginResponse>("/login", { code });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useProducts } from "@/app/lib/hooks/useProduct";
+import { useProducts } from "@/lib/hooks/useProduct";
 import { DataTable } from "@/components/data-table";
 import { productColumns } from "@/components/data-table/columns/product";
 import Loader from "@/components/loader";

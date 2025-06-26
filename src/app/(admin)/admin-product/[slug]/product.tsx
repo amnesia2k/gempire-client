@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteProduct, useProductBySlug } from "@/app/lib/hooks/useProduct";
+import { useDeleteProduct, useProductBySlug } from "@/lib/hooks/useProduct";
 import DashHeader from "@/components/dash-header";
 import Loader from "@/components/loader";
 import { Badge } from "@/components/ui/badge";

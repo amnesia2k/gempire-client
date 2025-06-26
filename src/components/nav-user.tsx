@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useLogoutAdmin } from "@/app/lib/hooks/useAdmin";
+import { useLogoutAdmin } from "@/lib/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 
 export function NavUser({
