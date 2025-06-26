@@ -18,10 +18,10 @@ export default function StoreLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <body className={`${alegreya.className} mx-auto max-w-7xl`}>
+      <div className={`${alegreya.className} mx-auto max-w-7xl`}>
         <Navbar />
         {children}
-      </body>
+      </div>
     </>
   );
 }

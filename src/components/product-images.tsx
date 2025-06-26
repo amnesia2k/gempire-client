@@ -1,6 +1,7 @@
 "use client";
 
 import type { ProductImage } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -50,21 +51,31 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
                   setActiveIndex(index);
                   setViewingLargeImage(true);
                 }}
-                className="h-28 w-28 flex-shrink-0 overflow-hidden rounded-md border"
+                className="h-[200px] w-[200px] flex-shrink-0 overflow-hidden rounded-md border"
               >
                 <Image
                   src={img.imageUrl}
                   alt={`${alt} thumbnail ${index + 1}`}
-                  width={112}
-                  height={112}
+                  width={200}
+                  height={200}
                   className="h-full w-full object-cover"
                 />
               </button>
             ))}
           </div>
 
-          {/* Desktop: wrapped flex */}
-          <div className="hidden flex-wrap gap-4 sm:flex">
+          {/* Desktop: responsive grid layout */}
+          <div
+            className={cn(
+              "hidden gap-4 sm:grid",
+              images.length === 1 && "grid-cols-1",
+              images.length === 2 && "grid-cols-2",
+              images.length === 3 && "grid-cols-2 grid-rows-2",
+              images.length === 4 && "grid-cols-2 grid-rows-2",
+              images.length === 5 && "grid-cols-3 grid-rows-2",
+              images.length === 6 && "grid-cols-3 grid-rows-2",
+            )}
+          >
             {images.map((img, index) => (
               <button
                 key={img._id}
@@ -72,13 +83,13 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
                   setActiveIndex(index);
                   setViewingLargeImage(true);
                 }}
-                className="h-28 w-28 overflow-hidden rounded-md border"
+                className="h-[180px] w-[180px] overflow-hidden rounded-md border"
               >
                 <Image
                   src={img.imageUrl}
                   alt={`${alt} thumbnail ${index + 1}`}
-                  width={112}
-                  height={112}
+                  width={200}
+                  height={200}
                   className="h-full w-full object-cover"
                 />
               </button>

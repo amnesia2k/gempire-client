@@ -15,7 +15,6 @@ interface ProductQuantityProps {
 export function ProductQuantity({ product }: ProductQuantityProps) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCartStore();
-  // const { toast } = useToast();
 
   const handleAddToCart = () => {
     if (quantity > product.unit) {
@@ -53,22 +52,23 @@ export function ProductQuantity({ product }: ProductQuantityProps) {
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-center rounded-md border">
+      <div className="flex items-center">
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={decrement}
           disabled={quantity <= 1}
-          className={`${quantity <= 1 ? "cursor-not-allowed" : ""}`}
+          className={`${quantity <= 1 ? "cursor-not-allowed" : ""} border-primary rounded-full`}
         >
           <Minus className="h-4 w-4" />
         </Button>
         <span className="w-12 text-center text-lg font-medium">{quantity}</span>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={increment}
           disabled={quantity >= product.unit}
+          className={`${quantity >= product.unit ? "cursor-not-allowed" : ""} border-primary rounded-full`}
         >
           <Plus className="h-4 w-4" />
         </Button>

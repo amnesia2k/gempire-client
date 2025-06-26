@@ -27,7 +27,7 @@ export default function PageContent() {
 
           return (
             <Link
-              href={`/products/${p.slug}`}
+              href={`/product/${p.slug}`}
               key={p._id}
               className="group border-muted bg-background mx-auto w-full max-w-[180px] rounded-md border shadow-sm transition hover:shadow-md sm:max-w-[200px]"
             >
