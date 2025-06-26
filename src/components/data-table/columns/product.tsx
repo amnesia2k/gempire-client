@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import type { Product } from "@/app/lib/api/product";
+import type { Product } from "@/lib/types";
 
 export const productColumns: ColumnDef<Product>[] = [
   {
