@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { useCreateCategory } from "@/lib/hooks/useCategory";
 import { toast } from "sonner";
+import { extractApiError } from "@/lib/axios";
 
 export const AddCategoryModal = ({
   open,
@@ -36,8 +37,7 @@ export const AddCategoryModal = ({
         setOpen(false);
       },
       onError: (error) => {
-        toast.error(error.message || "Something went wrong");
-        console.error(error);
+        toast.error(extractApiError(error));
       },
     });
   };

@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useLogoutAdmin } from "@/lib/hooks/useAdmin";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { extractApiError } from "@/lib/axios";
 
 export function NavUser({
   user,
@@ -34,14 +36,23 @@ export function NavUser({
   const { mutate: logout } = useLogoutAdmin();
 
   const handleLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        document.cookie = "admin-token=; path=/; max-age=0";
-        router.push("/dash-access");
-      },
-      onError: () => {
-        alert("Logout failed");
-      },
+    const logoutPromise = new Promise((resolve, reject) => {
+      logout(undefined, {
+        onSuccess: (res) => {
+          resolve(res); // ✅ triggers success toast
+          document.cookie = "admin-token=; path=/; max-age=0";
+          router.push("/dash-access");
+        },
+        onError: (err) => {
+          reject(err); // ❌ triggers error toast
+        },
+      });
+    });
+
+    toast.promise(logoutPromise, {
+      loading: "Logging out...",
+      success: "Logged out successfully 👋",
+      error: (err) => extractApiError(err),
     });
   };
 

@@ -33,10 +33,23 @@ export type Category = {
   slug: string;
 };
 
+export type CategoryWithProducts = {
+  _id: string;
+  name: string;
+  slug: string;
+  products: Product[];
+};
+
 export type GetCategoriesResponse = {
   success: boolean;
   message: string;
   data: Category[];
+};
+
+export type GetCategoryResponse = {
+  data: CategoryWithProducts;
+  message: string;
+  success: boolean;
 };
 
 export type CreateCategoryResponse = {
@@ -89,3 +102,43 @@ export interface CartItem {
   product: Product;
   quantity: number;
 }
+
+export type OrderStatus = "ordered" | "shipped" | "delivered" | "cancelled";
+
+export type OrderItem = {
+  _id: string;
+  productId: string;
+  quantity: number;
+  unitPrice: string;
+  product: Product;
+};
+
+export type Order = {
+  _id: string;
+  orderId: string;
+  name: string;
+  address: string;
+  telephone: string;
+  email: string;
+  note?: string;
+  status: OrderStatus;
+  createdAt: string;
+  items: OrderItem[];
+};
+
+export type GetOrdersResponse = {
+  success: boolean;
+  message: string;
+  data: Order[];
+};
+
+export type GetOrderResponse = {
+  success: boolean;
+  message: string;
+  data: Order;
+};
+
+export type UpdateOrderStatusResponse = {
+  success: boolean;
+  message: string;
+};

@@ -1,42 +1,42 @@
 "use client";
 
+import { extractApiError } from "@/lib/axios";
 import { useLoginAdmin } from "../../lib/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 export default function Access() {
   const [code, setCode] = useState("");
-  const { mutate, isPending, isError, error } = useLoginAdmin();
+  const [isPending, setIsPending] = useState(false); // 👈 manual pending state
+  const { mutateAsync } = useLoginAdmin();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (isPending) return;
+    if (!code || isPending) return;
 
-    mutate(
-      { code },
-      {
-        onSuccess: (data) => {
-          if (data.success && data.valid) {
-            const token = data.data.token;
-            const oneWeekInSeconds = 7 * 24 * 60 * 60;
+    setIsPending(true); // 👈 start loading
 
-            // ✅ Updated for prod-safe cookie
-            document.cookie = `admin-token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=None`;
+    const loginPromise = mutateAsync({ code })
+      .then((data) => {
+        toast.success(data.message);
+        const token = data.data.token;
+        const oneWeekInSeconds = 7 * 24 * 60 * 60;
 
-            router.push("/admin-dashboard");
-          } else {
-            alert("Invalid access code");
-          }
-        },
+        document.cookie = `admin-token=${token}; path=/; max-age=${oneWeekInSeconds}; secure; samesite=None`;
 
-        onError: () => {
-          alert("Something went wrong during login.");
-        },
-      },
-    );
-    setCode(""); // Clear the input after submission
+        router.push("/admin-dashboard");
+      })
+      .finally(() => setIsPending(false)); // 👈 reset loading regardless of result
+
+    toast.promise(loginPromise, {
+      loading: "Verifying access...",
+      error: (err) => extractApiError(err),
+    });
+
+    setCode("");
   };
 
   return (
@@ -68,14 +68,6 @@ export default function Access() {
       >
         {isPending ? "Logging in..." : "Access Dashboard"}
       </button>
-
-      {isError && (
-        <div className="text-sm text-red-500">
-          {error instanceof Error
-            ? error.message
-            : "Failed to access dashboard"}
-        </div>
-      )}
     </form>
   );
 }

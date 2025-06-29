@@ -21,7 +21,7 @@ export default function PageContent() {
     <div className="space-y-5 py-5">
       <h1 className="text-center text-4xl">New Arrivals</h1>
 
-      <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products?.map((p) => {
           const firstImage = p.images?.[0];
 
@@ -29,7 +29,7 @@ export default function PageContent() {
             <Link
               href={`/product/${p.slug}`}
               key={p._id}
-              className="group border-muted bg-background mx-auto w-full max-w-[180px] rounded-md border shadow-sm transition hover:shadow-md sm:max-w-[200px]"
+              className="group border-muted bg-background mx-auto w-full max-w-[200px] rounded-md border shadow-sm transition hover:shadow-md"
             >
               <div className="relative aspect-square w-full overflow-hidden rounded-t-md">
                 {firstImage && (
@@ -48,11 +48,11 @@ export default function PageContent() {
                 )}
               </div>
 
-              <div className="px-2 py-3">
-                <h2 className="text-foreground truncate text-sm font-semibold">
+              <div className="space-y-1 px-2 py-3">
+                <h2 className="text-foreground truncate text-lg font-semibold">
                   {p.name}
                 </h2>
-                <p className="text-muted-foreground mt-1 text-xs">
+                <p className="text-muted-foreground">
                   ₦{Number(p.price).toLocaleString("en-NG")}
                 </p>
               </div>

@@ -14,12 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Loader from "@/components/loader";
+import { extractApiError } from "@/lib/axios";
 
 interface Props {
   slug: string;
@@ -28,9 +29,10 @@ interface Props {
 export default function EditProductForm({ slug }: Props) {
   const { data: productData, isLoading } = useProductBySlug(slug);
   const { data: categories } = useCategories();
-  const { mutate, isPending } = useEditProduct();
+  const { mutateAsync } = useEditProduct();
   const router = useRouter();
 
+  const [isPending, setIsPending] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
@@ -64,7 +66,7 @@ export default function EditProductForm({ slug }: Props) {
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     const selected = Array.from(input.files ?? []);
-    if (selected.length === 0) return;
+    if (!selected.length) return;
 
     if ((files?.length ?? 0) + selected.length > 5) {
       toast.error("You can only upload up to 5 images.");
@@ -97,9 +99,11 @@ export default function EditProductForm({ slug }: Props) {
     setExistingImages((prev) => prev.filter((img) => img._id !== id));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isPending || !productData) return;
+
+    setIsPending(true);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -111,24 +115,28 @@ export default function EditProductForm({ slug }: Props) {
       Array.from(files).forEach((file) => formData.append("files", file));
     }
 
-    mutate(
-      {
-        slug: productData.slug,
-        formData,
-      },
-      {
-        onSuccess: (updated) => {
-          toast.success("Product updated successfully!");
-          setDeletedImageIds([]);
-          setFiles(null);
-          setPreviewImages([]);
-          router.push(`/admin-product/${updated.slug}`);
-        },
-        onError: (err) => {
-          toast.error(err.message || "Failed to update product");
-        },
-      },
-    );
+    const updatePromise = mutateAsync({
+      slug: productData.slug,
+      formData,
+    })
+      .then((res) => {
+        toast.success(res.message);
+        setDeletedImageIds([]);
+        setFiles(null);
+        setPreviewImages([]);
+        router.push(`/admin-product/${res.data.slug}`);
+      })
+      .catch((err) => {
+        throw err;
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
+
+    toast.promise(updatePromise, {
+      loading: "Updating product...",
+      error: (err) => extractApiError(err),
+    });
   };
 
   if (isLoading || !categories || !productData) {
@@ -145,8 +153,9 @@ export default function EditProductForm({ slug }: Props) {
             name="name"
             defaultValue={formState.name}
             placeholder="Enter Product Name"
-            required
             type="text"
+            required
+            disabled={isPending}
           />
 
           <div className="space-y-3">
@@ -156,6 +165,7 @@ export default function EditProductForm({ slug }: Props) {
               onValueChange={(val) =>
                 val === "__new__" ? setShowModal(true) : setCategoryId(val)
               }
+              disabled={isPending}
               required
             >
               <SelectTrigger className="w-full p-5">
@@ -183,8 +193,9 @@ export default function EditProductForm({ slug }: Props) {
             name="price"
             defaultValue={formState.price}
             placeholder="e.g., 4000"
-            required
             type="number"
+            required
+            disabled={isPending}
           />
           <FormField
             label="Unit"
@@ -192,8 +203,9 @@ export default function EditProductForm({ slug }: Props) {
             name="unit"
             defaultValue={formState.unit}
             placeholder="e.g., 100"
-            required
             type="number"
+            required
+            disabled={isPending}
           />
         </div>
 
@@ -203,8 +215,9 @@ export default function EditProductForm({ slug }: Props) {
           name="description"
           defaultValue={formState.description}
           placeholder="Enter Product Description"
-          required
           variant="textarea"
+          required
+          disabled={isPending}
         />
 
         <div>
@@ -225,6 +238,7 @@ export default function EditProductForm({ slug }: Props) {
                   type="button"
                   onClick={() => removeExistingImage(img._id)}
                   className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white"
+                  disabled={isPending}
                 >
                   <Trash className="h-4 w-4" />
                 </button>
@@ -233,7 +247,7 @@ export default function EditProductForm({ slug }: Props) {
 
             {previewImages.map((src, index) => (
               <div
-                key={src}
+                key={index}
                 className="relative aspect-square w-full max-w-[160px] flex-shrink-0"
               >
                 <Image
@@ -246,6 +260,7 @@ export default function EditProductForm({ slug }: Props) {
                   type="button"
                   onClick={() => removeImageAt(index)}
                   className="absolute top-1 right-1 z-10 rounded-full bg-red-600 p-1 text-white"
+                  disabled={isPending}
                 >
                   <Trash className="h-4 w-4" />
                 </button>
@@ -255,7 +270,11 @@ export default function EditProductForm({ slug }: Props) {
             {existingImages.length + previewImages.length < 5 && (
               <label
                 htmlFor="files"
-                className="text-muted-foreground relative flex aspect-square w-full max-w-[160px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm transition hover:border-gray-500 hover:text-gray-700"
+                className={`relative flex aspect-square w-full max-w-[160px] flex-shrink-0 items-center justify-center rounded-md border-2 border-dashed text-sm transition ${
+                  isPending
+                    ? "border-muted-foreground cursor-not-allowed opacity-50"
+                    : "cursor-pointer border-gray-300 hover:border-gray-500 hover:text-gray-700"
+                }`}
               >
                 <Plus size={50} />
                 <Input
@@ -265,7 +284,8 @@ export default function EditProductForm({ slug }: Props) {
                   accept="image/*"
                   multiple
                   onChange={handleFilesChange}
-                  className="absolute inset-0 cursor-pointer opacity-0"
+                  className="absolute inset-0 opacity-0"
+                  disabled={isPending}
                 />
               </label>
             )}
@@ -279,9 +299,10 @@ export default function EditProductForm({ slug }: Props) {
           variant="outline"
           size="lg"
           type="submit"
-          className="w-full"
+          className="w-full justify-center"
           disabled={isPending}
         >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isPending ? "Updating..." : "Update Product"}
         </Button>
       </form>
