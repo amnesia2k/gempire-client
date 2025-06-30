@@ -103,11 +103,11 @@ export const orderColumns: ColumnDef<Order>[] = [
             <DropdownMenuItem asChild>
               <Link href={`/admin-order/${order._id}`}>View Details</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+            {/* <DropdownMenuItem asChild>
               <Link href={`/admin-order/${order._id}/edit-status`}>
                 Update Status
               </Link>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
