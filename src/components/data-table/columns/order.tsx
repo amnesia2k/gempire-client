@@ -57,6 +57,7 @@ export const orderColumns: ColumnDef<Order>[] = [
         ordered: "text-yellow-600",
         shipped: "text-blue-600",
         delivered: "text-green-600",
+        cancelled: "text-red-600",
       };
 
       return (

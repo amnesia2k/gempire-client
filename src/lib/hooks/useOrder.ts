@@ -14,6 +14,7 @@ export const useOrders = () => {
   return useQuery({
     queryKey: ["orders"],
     queryFn: getAllOrders,
+    staleTime: 600_000,
   });
 };
 
@@ -22,18 +23,19 @@ export const useOrderById = (id: string | undefined) => {
   return useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrderById(id!),
-    enabled: !!id, // Only fetch if id is truthy
+    enabled: !!id,
+    staleTime: 600_000,
   });
 };
 
-// 🧾 Create a new order (client side)
+// 🧾 Create a new order
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: createOrderFn,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["orders"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 };
@@ -46,9 +48,9 @@ export const useUpdateOrderStatus = () => {
     mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
       updateOrderStatusFn(id, status),
 
-    onSuccess: (_message, { id }) => {
-      void queryClient.invalidateQueries({ queryKey: ["orders"] });
-      void queryClient.invalidateQueries({ queryKey: ["order", id] });
+    onSuccess: async (_message, { id }) => {
+      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      await queryClient.invalidateQueries({ queryKey: ["order", id] });
     },
   });
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Package, Command, LayoutDashboard, ShoppingBag } from "lucide-react";
+import { Package, LayoutDashboard, ShoppingBag } from "lucide-react";
 
 import {
   Sidebar,
@@ -53,15 +53,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+              <Link href="/">
+                <div className="grid flex-1 pl-8 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">Gempire</span>
+                  <span className="truncate text-xs">Admin Dashboard</span>
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Admin Panel</span>
-                </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

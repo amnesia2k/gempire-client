@@ -37,11 +37,11 @@ export const getAllOrders = async (): Promise<Order[]> => {
 };
 
 // 🔍 Get single order by ID (admin view)
-export const getOrderById = async (id: string): Promise<Order> => {
+export const getOrderById = async (id: string): Promise<GetOrderResponse> => {
   const res = await api.get<GetOrderResponse>(`/order/${id}`);
 
   if (res.data?.success) {
-    return res.data.data;
+    return res.data;
   }
 
   throw new Error(res.data?.message || "Failed to fetch order");
@@ -51,14 +51,14 @@ export const getOrderById = async (id: string): Promise<Order> => {
 export const updateOrderStatus = async (
   id: string,
   status: OrderStatus,
-): Promise<string> => {
+): Promise<UpdateOrderStatusResponse> => {
   const res = await api.patch<UpdateOrderStatusResponse>(
     `/order/${id}/status`,
     { status },
   );
 
   if (res.data?.success) {
-    return res.data.message;
+    return res.data;
   }
 
   throw new Error(res.data?.message || "Failed to update order status");

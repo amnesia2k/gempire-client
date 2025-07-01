@@ -126,9 +126,9 @@ export default function EditProductForm({ slug }: Props) {
         setPreviewImages([]);
         router.push(`/admin-product/${res.data.slug}`);
       })
-      .catch((err) => {
-        throw err;
-      })
+      // .catch((err) => {
+      //   throw err;
+      // })
       .finally(() => {
         setIsPending(false);
       });

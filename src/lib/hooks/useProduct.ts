@@ -13,6 +13,7 @@ export const useProducts = () => {
   return useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
+    staleTime: 600_000, // 10 minutes
   });
 };
 
@@ -20,7 +21,8 @@ export const useProductBySlug = (slug: string | undefined) => {
   return useQuery({
     queryKey: ["product", slug],
     queryFn: () => getProductBySlug(slug!),
-    enabled: !!slug, // only runs if `slug` is defined
+    enabled: !!slug,
+    staleTime: 600_000, // 10 minutes
   });
 };
 
@@ -28,8 +30,11 @@ export const useCreateProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createProductFn,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["products"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["products"] }),
+        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+      ]);
     },
   });
 };
@@ -39,9 +44,12 @@ export const useEditProduct = () => {
   return useMutation({
     mutationFn: ({ slug, formData }: { slug: string; formData: FormData }) =>
       editProductFn(slug, formData),
-    onSuccess: (_, { slug }) => {
-      void queryClient.invalidateQueries({ queryKey: ["products"] });
-      void queryClient.invalidateQueries({ queryKey: ["product", slug] });
+    onSuccess: async (_, { slug }) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["products"] }),
+        queryClient.invalidateQueries({ queryKey: ["product", slug] }),
+        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+      ]);
     },
   });
 };
@@ -50,8 +58,11 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteProductFn(id),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["products"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["products"] }),
+        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+      ]);
     },
   });
 };

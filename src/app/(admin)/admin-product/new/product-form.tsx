@@ -80,16 +80,12 @@ export default function ProductForm() {
 
     const createPromise = mutateAsync(formData)
       .then((res) => {
-        toast.success(res.message || "Product created 🎉");
+        toast.success(res.message);
         form.reset();
         setFiles(null);
         setPreviewImages([]);
         setCategoryId("");
         router.push(`/admin-product/${res.data.slug}`);
-      })
-      .catch((err) => {
-        // handled by toast.promise too, just in case
-        throw err;
       })
       .finally(() => {
         setIsPending(false);
