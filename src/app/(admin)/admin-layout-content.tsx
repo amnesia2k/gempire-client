@@ -14,21 +14,21 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
-import Clock from "@/components/clock";
-import { useAdmin } from "@/context/admin-context";
+// import Clock from "@/components/clock";
+// import { useAdmin } from "@/context/admin-context";
 
 export function AdminLayoutContent({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { admin } = useAdmin();
-  const owner = admin?.owner;
+  // const { admin } = useAdmin();
+  // const owner = admin?.owner;
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <Clock />
-        <header className="flex shrink-0 items-center justify-between px-6 pt-1 pb-5">
+        {/* <Clock /> */}
+        <header className="flex shrink-0 items-center justify-between px-6 py-5">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             <Separator
@@ -39,10 +39,10 @@ export function AdminLayoutContent({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="text-lg font-medium">
-                    Welcome,{" "}
-                    <span className="text-xl font-semibold italic">
+                    Welcome,
+                    {/* <span className="text-xl font-semibold italic">
                       {owner}
-                    </span>
+                    </span> */}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>

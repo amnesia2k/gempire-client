@@ -11,6 +11,7 @@ type BaseProps = {
   required?: boolean;
   className?: string;
   defaultValue?: string | number;
+  disabled?: boolean;
 };
 
 type InputFieldProps = {
@@ -36,7 +37,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
   } = props;
 
   if (props.variant === "textarea") {
-    const { rows = 5 } = props;
+    const { rows = 5, disabled } = props;
     return (
       <div className={`space-y-3 ${className}`}>
         <Label htmlFor={id}>{label}</Label>
@@ -46,6 +47,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
           placeholder={placeholder}
           required={required}
           rows={rows}
+          disabled={disabled} // 👈 here
           className="resize-none p-5"
           defaultValue={props.defaultValue}
         />
@@ -54,6 +56,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
   }
 
   const type = props.type ?? "text";
+  const { disabled } = props;
 
   return (
     <div className={`space-y-3 ${className}`}>
@@ -64,6 +67,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         placeholder={placeholder}
         required={required}
         type={type}
+        disabled={disabled} // 👈 here too
         className="p-5"
         defaultValue={props.defaultValue}
       />

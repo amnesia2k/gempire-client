@@ -34,16 +34,16 @@ export const createProduct = async (formData: FormData) => {
   });
 
   if (res.data?.success) {
-    return res.data.data;
+    return res.data;
   }
 
-  throw new Error(res.data?.message || "Something went wrong");
+  throw new Error(res.data?.message || "Failed to create product");
 };
 
 export const editProduct = async (
   slug: string,
   formData: FormData,
-): Promise<Product> => {
+): Promise<GetProductResponse> => {
   const res = await api.patch<GetProductResponse>(
     `/product/${slug}`,
     formData,
@@ -55,7 +55,7 @@ export const editProduct = async (
   );
 
   if (res.data?.success) {
-    return res.data.data;
+    return res.data;
   }
 
   throw new Error(res.data?.message || "Failed to update product");

@@ -14,17 +14,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash } from "lucide-react";
+import { Loader2, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { extractApiError } from "@/lib/axios";
 
 export default function ProductForm() {
   const { data: categories, isLoading: loadingCategories } = useCategories();
-  const { mutate, isPending } = useCreateProduct();
+  const { mutateAsync } = useCreateProduct();
   const router = useRouter();
 
+  const [isPending, setIsPending] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [categoryId, setCategoryId] = useState("");
@@ -61,9 +63,11 @@ export default function ProductForm() {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isPending) return;
+
+    setIsPending(true);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -74,18 +78,22 @@ export default function ProductForm() {
 
     formData.append("categoryId", categoryId);
 
-    mutate(formData, {
-      onSuccess: (createdProduct) => {
-        toast.success("Product created 🎉");
+    const createPromise = mutateAsync(formData)
+      .then((res) => {
+        toast.success(res.message);
         form.reset();
         setFiles(null);
         setPreviewImages([]);
         setCategoryId("");
-        router.push(`/admin-product/${createdProduct.slug}`);
-      },
-      onError: (error) => {
-        toast.error(error.message || "Something went wrong");
-      },
+        router.push(`/admin-product/${res.data.slug}`);
+      })
+      .finally(() => {
+        setIsPending(false);
+      });
+
+    toast.promise(createPromise, {
+      loading: "Creating product...",
+      error: (err) => extractApiError(err),
     });
   };
 
@@ -98,8 +106,8 @@ export default function ProductForm() {
             id="name"
             name="name"
             placeholder="Enter Product Name"
-            required
             type="text"
+            disabled={isPending}
           />
 
           <div className="space-y-3">
@@ -113,7 +121,6 @@ export default function ProductForm() {
                   setCategoryId(val);
                 }
               }}
-              required
             >
               <SelectTrigger className="w-full p-5">
                 <SelectValue placeholder="Choose a Category" />
@@ -143,16 +150,16 @@ export default function ProductForm() {
             id="price"
             name="price"
             placeholder="e.g., 4000"
-            required
             type="number"
+            disabled={isPending}
           />
           <FormField
             label="Unit"
             id="unit"
             name="unit"
             placeholder="e.g., 100"
-            required
             type="number"
+            disabled={isPending}
           />
         </div>
 
@@ -161,8 +168,8 @@ export default function ProductForm() {
           id="description"
           name="description"
           placeholder="Enter Product Description"
-          required
           variant="textarea"
+          disabled={isPending}
         />
 
         <div>
@@ -192,7 +199,11 @@ export default function ProductForm() {
             {previewImages.length < 5 && (
               <label
                 htmlFor="files"
-                className="text-muted-foreground relative flex aspect-square w-full max-w-[160px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-sm transition hover:border-gray-500 hover:text-gray-700"
+                className={`relative flex aspect-square w-full max-w-[160px] flex-shrink-0 items-center justify-center rounded-md border-2 border-dashed text-sm transition ${
+                  isPending
+                    ? "border-muted-foreground cursor-not-allowed opacity-50"
+                    : "cursor-pointer border-gray-300 hover:border-gray-500 hover:text-gray-700"
+                }`}
               >
                 <Plus size={50} />
                 <Input
@@ -202,7 +213,8 @@ export default function ProductForm() {
                   accept="image/*"
                   multiple
                   onChange={handleFilesChange}
-                  className="absolute inset-0 cursor-pointer opacity-0"
+                  className="absolute inset-0 opacity-0"
+                  disabled={isPending}
                 />
               </label>
             )}
@@ -216,9 +228,10 @@ export default function ProductForm() {
           variant="default"
           size="lg"
           type="submit"
-          className="w-full"
+          className="w-full justify-center"
           disabled={isPending}
         >
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isPending ? "Creating..." : "Create Product"}
         </Button>
       </form>
