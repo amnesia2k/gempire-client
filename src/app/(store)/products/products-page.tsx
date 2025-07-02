@@ -1,78 +1,75 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useCategoryBySlug } from "@/lib/hooks/useCategory";
 import Loader from "@/components/loader";
-import Image from "next/image";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { CategoryFilter } from "@/components/category-filter";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ProductGrid } from "@/components/product-grid";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
-  const selectedCategory = searchParams.get("category");
+  const router = useRouter();
+
+  const selectedCategory = searchParams.get("category") ?? "all";
+  const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
   const {
     data: categoryData,
     isLoading,
     error,
-  } = useCategoryBySlug(selectedCategory ?? "");
+  } = useCategoryBySlug(selectedCategory, currentPage);
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    params.set("page", newPage.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   if (isLoading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
 
-  const products = categoryData?.products;
+  const products = categoryData?.products ?? [];
+  const totalPages = categoryData?.totalPages ?? 1;
 
   return (
     <div className="space-y-6 py-6">
       <h1 className="text-center text-4xl font-bold">Our Collections</h1>
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
         <CategoryFilter />
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            disabled={currentPage <= 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="rounded-full"
+          >
+            <ChevronLeft />
+          </Button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <Button
+            variant="outline"
+            disabled={currentPage >= totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="rounded-full"
+          >
+            <ChevronRight />
+          </Button>
+        </div>
       </div>
 
-      {!products || products.length === 0 ? (
+      {products.length === 0 ? (
         <div className="text-muted-foreground text-center">
           No products found in this category
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((p) => {
-            const firstImage = p.images?.[0];
-            return (
-              <Link
-                href={`/product/${p.slug}`}
-                key={p._id}
-                className="group bg-background border-muted w-full max-w-[200px] rounded-md border shadow-sm transition hover:shadow-md"
-              >
-                <div className="relative aspect-square w-full overflow-hidden rounded-t-md">
-                  {firstImage && (
-                    <Image
-                      src={firstImage.imageUrl}
-                      alt={p.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  )}
-                  {p.category?.name && (
-                    <Badge className="absolute top-2 left-2 z-10 text-xs font-medium capitalize">
-                      {p.category.name}
-                    </Badge>
-                  )}
-                </div>
-
-                <div className="space-y-1 px-2 py-3">
-                  <h2 className="text-foreground truncate text-lg font-semibold">
-                    {p.name}
-                  </h2>
-                  <p className="text-muted-foreground">
-                    ₦{Number(p.price).toLocaleString("en-NG")}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        <ProductGrid products={products} />
       )}
     </div>
   );

@@ -38,6 +38,9 @@ export type CategoryWithProducts = {
   name: string;
   slug: string;
   products: Product[];
+  total: number;
+  page: number;
+  totalPages: number;
 };
 
 export type GetCategoriesResponse = {

@@ -91,10 +91,10 @@ export default function CheckoutForm() {
           disabled={isPending}
         />
         <FormField
-          label="Your Contact Number"
+          label="Your WhatsApp Number"
           id="telephone"
           name="telephone"
-          placeholder="Enter your WhatsApp number, i.e. +2347012345678"
+          placeholder="i.e. +2347012345678"
           type="text"
           disabled={isPending}
         />

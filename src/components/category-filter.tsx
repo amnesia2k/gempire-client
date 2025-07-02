@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCategories } from "@/lib/hooks/useCategory";
+import { useCategoriesWithAll } from "@/lib/hooks/useCategory";
 import {
   Select,
   SelectTrigger,
@@ -15,15 +15,14 @@ export function CategoryFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selected = searchParams.get("category");
-  const { data: categories, isLoading } = useCategories();
+  const { data: categories, isLoading } = useCategoriesWithAll();
 
-  // 🪄 If no category is selected, and categories have loaded, pick the first one
+  // 🪄 Default to "all" if no category is selected
   useEffect(() => {
     if (!selected && categories && categories.length > 0) {
-      const firstSlug = categories[0]?.slug;
       const params = new URLSearchParams(Array.from(searchParams.entries()));
-      params.set("category", firstSlug!);
-      router.replace(`?${params.toString()}`); // don't add to history
+      params.set("category", "all"); // explicitly set "all"
+      router.replace(`?${params.toString()}`); // shallow replace to avoid stacking history
     }
   }, [selected, categories, searchParams, router]);
 
@@ -37,10 +36,7 @@ export function CategoryFilter() {
 
   return (
     <div className="max-w-xs">
-      <Select
-        onValueChange={handleChange}
-        value={selected ?? categories[0]?.slug}
-      >
+      <Select onValueChange={handleChange} value={selected ?? "all"}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Filter by Category" />
         </SelectTrigger>
