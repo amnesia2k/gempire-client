@@ -29,12 +29,12 @@ export const createCategory = async (name: string) => {
 
 export const getCategoryBySlug = async (
   slug: string,
+  page = 1,
+  limit = 12,
 ): Promise<CategoryWithProducts> => {
-  const res = await api.get<GetCategoryResponse>(`/category/${slug}`);
-
-  if (res.data?.success) {
-    return res.data.data;
-  }
-
+  const res = await api.get<GetCategoryResponse>(
+    `/category/${slug}?page=${page}&limit=${limit}`,
+  );
+  if (res.data?.success) return res.data.data;
   throw new Error(res.data?.message || "Something went wrong");
 };

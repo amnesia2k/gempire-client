@@ -1,16 +1,13 @@
 "use client";
 
 import Loader from "@/components/loader";
-import { useProducts } from "../../lib/hooks/useProduct";
-import Image from "next/image";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { useProducts } from "@/lib/hooks/useProduct";
+import { ProductGrid } from "@/components/product-grid";
 
 export default function PageContent() {
   const { data: products, isLoading, error } = useProducts();
 
   if (isLoading) return <Loader />;
-
   if (error) return <div>Error: {error.message}</div>;
 
   if (!products || products.length === 0) {
@@ -20,46 +17,7 @@ export default function PageContent() {
   return (
     <div className="space-y-5 py-5">
       <h1 className="text-center text-4xl">New Arrivals</h1>
-
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {products?.map((p) => {
-          const firstImage = p.images?.[0];
-
-          return (
-            <Link
-              href={`/product/${p.slug}`}
-              key={p._id}
-              className="group border-muted bg-background mx-auto w-full max-w-[200px] rounded-md border shadow-sm transition hover:shadow-md"
-            >
-              <div className="relative aspect-square w-full overflow-hidden rounded-t-md">
-                {firstImage && (
-                  <Image
-                    src={firstImage.imageUrl}
-                    alt={p.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                )}
-
-                {p.category?.name && (
-                  <Badge className="absolute top-2 left-2 z-10 text-xs font-medium capitalize">
-                    {p.category.name}
-                  </Badge>
-                )}
-              </div>
-
-              <div className="space-y-1 px-2 py-3">
-                <h2 className="text-foreground truncate text-lg font-semibold">
-                  {p.name}
-                </h2>
-                <p className="text-muted-foreground">
-                  ₦{Number(p.price).toLocaleString("en-NG")}
-                </p>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      <ProductGrid products={products} />
     </div>
   );
 }
