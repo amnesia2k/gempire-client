@@ -1,17 +1,18 @@
 import "@/styles/globals.css";
 
-import { Poppins, Raleway } from "next/font/google";
 import { QueryProvider } from "./utils/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
-const poppins = Poppins({
+import { Inter, Poppins } from "next/font/google";
+
+const inter = Inter({
   subsets: ["latin"],
   weight: ["500"],
   variable: "--display-family",
 });
 
-const raleway = Raleway({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--text-family",
@@ -24,7 +25,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${poppins.variable} ${raleway.variable}`}
+        className={`${inter.variable} ${poppins.variable}`}
         suppressHydrationWarning
       >
         <body>

@@ -1,6 +1,19 @@
 import Navbar from "@/components/navbar";
 import { type Metadata } from "next";
-import { Alegreya_Sans } from "next/font/google";
+
+import { Inter, Poppins } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--display-family",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--text-family",
+});
 
 export const metadata: Metadata = {
   title: "Gempire",
@@ -8,17 +21,14 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const alegreya = Alegreya_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
-
 export default function StoreLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <div className={`${alegreya.className} mx-auto max-w-7xl`}>
+      <div
+        className={`${inter.variable} ${poppins.variable} mx-auto max-w-7xl`}
+      >
         <Navbar />
         {children}
       </div>
