@@ -25,19 +25,19 @@ export function CartItem({ item }: CartItemProps) {
   };
 
   return (
-    <div className="bg-card flex items-center gap-4 rounded-lg border p-4">
-      <div className="relative h-24 w-24 overflow-hidden rounded-md">
+    <div className="bg-card flex flex-wrap items-center gap-4 rounded-lg border p-4 md:flex-nowrap">
+      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
         <Image
           src={item.product.images[0]!.imageUrl}
           alt={item.product.name}
           fill
           className="object-cover"
-          data-ai-hint="fragrance bottle"
         />
       </div>
-      <div className="flex-grow">
+
+      <div className="min-w-0 flex-grow">
         <Link href={`/product/${item.product.slug}`}>
-          <h3 className="font-headline text-lg hover:underline">
+          <h3 className="font-headline truncate text-lg hover:underline">
             {item.product.name}
           </h3>
         </Link>
@@ -45,32 +45,37 @@ export function CartItem({ item }: CartItemProps) {
           ₦{Number(item.product.price).toLocaleString("en-NG")}
         </p>
       </div>
+
       <div className="flex items-center">
         <Button
           variant="outline"
           size="icon"
           onClick={decrement}
-          className={`border-primary rounded-full`}
+          className="border-primary rounded-full"
         >
           <Minus className="h-4 w-4" />
         </Button>
-        <span className="w-10 text-center">{item.quantity}</span>
+        <span className="w-8 text-center">{item.quantity}</span>
         <Button
           variant="outline"
           size="icon"
           onClick={increment}
           disabled={item.quantity >= item.product.unit}
-          className={`${item.quantity >= item.product.unit ? "cursor-not-allowed" : ""} border-primary rounded-full`}
+          className={`border-primary rounded-full ${
+            item.quantity >= item.product.unit ? "cursor-not-allowed" : ""
+          }`}
         >
           <Plus className="h-4 w-4" />
         </Button>
       </div>
-      <div>
-        <p className="w-20 text-right font-semibold">
+
+      <div className="text-right">
+        <p className="w-20 font-semibold">
           ₦
           {(Number(item.product.price) * item.quantity).toLocaleString("en-NG")}
         </p>
       </div>
+
       <div>
         <Button
           variant="ghost"

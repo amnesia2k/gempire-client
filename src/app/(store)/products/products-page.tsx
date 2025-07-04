@@ -34,8 +34,8 @@ export default function ProductsPage() {
   const totalPages = categoryData?.totalPages ?? 1;
 
   return (
-    <div className="space-y-6 py-6">
-      <h1 className="text-center text-4xl font-bold">Our Collections</h1>
+    <div className="space-y-5">
+      <h1 className="text-center text-4xl">Our Collections</h1>
 
       <div className="flex items-center justify-between">
         <CategoryFilter />
@@ -50,7 +50,7 @@ export default function ProductsPage() {
           </Button>
 
           <span>
-            Page {currentPage} of {totalPages}
+            {currentPage} of {totalPages}
           </span>
 
           <Button
