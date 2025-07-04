@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useCartStore } from "@/context/cart-store";
 import { Button } from "@/components/ui/button";
 import { CartItem } from "@/components/cart-item";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
 import CheckoutForm from "./checkout-form";
+import Loader from "@/components/loader";
 
 export default function CartCheckoutPage() {
   const cartItems = useCartStore((state) => state.cartItems);
@@ -96,10 +97,12 @@ export default function CartCheckoutPage() {
         <>
           <Separator className="my-12" />
           <h2 className="font-headline mb-6 text-2xl">Checkout Details</h2>
-          <CheckoutForm
-            deliveryMethod={deliveryMethod}
-            setDeliveryMethod={setDeliveryMethod}
-          />
+          <Suspense fallback={<Loader />}>
+            <CheckoutForm
+              deliveryMethod={deliveryMethod}
+              setDeliveryMethod={setDeliveryMethod}
+            />
+          </Suspense>
         </>
       )}
     </div>
