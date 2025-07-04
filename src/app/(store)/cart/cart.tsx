@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/components/cart-item";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
-import CheckoutForm from "../checkout/checkout-form";
+import CheckoutForm from "./checkout-form";
 
 export default function CartCheckoutPage() {
   const cartItems = useCartStore((state) => state.cartItems);
