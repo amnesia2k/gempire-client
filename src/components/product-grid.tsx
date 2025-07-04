@@ -27,7 +27,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                   src={firstImage.imageUrl}
                   alt={p.name}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-center transition-transform duration-300 group-hover:scale-105"
                 />
               )}
               {p.category?.name && (

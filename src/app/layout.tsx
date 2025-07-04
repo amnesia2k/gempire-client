@@ -4,15 +4,15 @@ import { QueryProvider } from "./utils/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 
-import { Inter, Poppins } from "next/font/google";
+import { Macondo, Zain } from "next/font/google";
 
-const inter = Inter({
+const macondo = Macondo({
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["400"],
   variable: "--display-family",
 });
 
-const poppins = Poppins({
+const zain = Zain({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--text-family",
@@ -25,7 +25,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${inter.variable} ${poppins.variable}`}
+        className={`${macondo.variable} ${zain.variable}`}
         suppressHydrationWarning
       >
         <body>

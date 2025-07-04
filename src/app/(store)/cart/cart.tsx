@@ -38,7 +38,7 @@ export default function CartCheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div>
       <h1 className="font-headline mb-8 text-4xl">Your Cart</h1>
 
       <div className="grid gap-12 md:grid-cols-3">

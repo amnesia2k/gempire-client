@@ -3,8 +3,8 @@ import Cart from "./cart";
 
 export default function CartPage() {
   return (
-    <div>
+    <section className="p-5">
       <Cart />
-    </div>
+    </section>
   );
 }

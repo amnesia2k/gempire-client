@@ -15,8 +15,9 @@ export default function PageContent() {
   }
 
   return (
-    <div className="space-y-5 py-5">
+    <div className="space-y-5">
       <h1 className="text-center text-4xl">New Arrivals</h1>
+
       <ProductGrid products={products} />
     </div>
   );
