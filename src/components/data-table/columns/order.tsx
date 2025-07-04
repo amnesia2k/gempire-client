@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import type { Order } from "@/lib/types"; // 👈 uses your refined Order type
+import { Badge } from "@/components/ui/badge";
 
 export const orderColumns: ColumnDef<Order>[] = [
   {
@@ -64,6 +65,20 @@ export const orderColumns: ColumnDef<Order>[] = [
         <div className={`${colorMap[status as string]} font-medium`}>
           {String(status).toUpperCase()}
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: "deliveryMethod",
+    header: "Delivery",
+    cell: ({ row }) => {
+      const delivery = row.getValue("deliveryMethod");
+      const label = delivery === "pickup" ? "Pickup" : "Delivery";
+
+      const badgeColor = delivery === "pickup" ? "bg-amber-200" : "bg-sky-200";
+
+      return (
+        <Badge className={`text-xs ${badgeColor} capitalize`}>{label}</Badge>
       );
     },
   },

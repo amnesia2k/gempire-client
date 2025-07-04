@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import CartIcon from "./cart-icon";
+import { cn } from "@/lib/utils"; // assuming you're using ShadCN's `cn` util
+import { ModeToggle } from "./mode-toggle";
 
 const navLinks = [
   { id: 1, title: "Home", to: "" },
@@ -19,7 +21,6 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
-  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -32,10 +33,10 @@ export default function Navbar() {
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = "hidden"; // disable scroll
+      document.body.style.overflow = "hidden";
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = ""; // restore scroll
+      document.body.style.overflow = "";
     }
 
     return () => {
@@ -44,7 +45,7 @@ export default function Navbar() {
   }, [isOpen]);
 
   return (
-    <nav className="relative z-50 flex items-center justify-between px-4 py-4 lg:px-8">
+    <nav className="bg-background relative z-50 flex items-center justify-between px-4 py-4 lg:px-8">
       <Link href="/" className="text-2xl font-bold">
         Gempire
       </Link>
@@ -55,41 +56,50 @@ export default function Navbar() {
           <Link
             key={link.id}
             href={`/${link.to}`}
-            className={`${
-              pathname === `/${link.to}` ? "text-lg font-bold" : "text-sm"
-            }`}
+            className={cn(
+              "hover:text-primary text-sm transition-colors",
+              pathname === `/${link.to}` && "text-lg font-bold",
+            )}
           >
             {link.title}
           </Link>
         ))}
       </div>
 
-      {/* Desktop cart */}
-      <div className="hidden lg:block">
-        <CartIcon />
+      <div className="flex items-center gap-x-4">
+        <ModeToggle />
+        {/* Desktop cart */}
+        <div className="hidden lg:block">
+          <CartIcon variant="outline" />
+        </div>
+
+        {/* Mobile menu button */}
+        <button
+          className="flex cursor-pointer items-center lg:hidden"
+          onClick={toggleMenu}
+          aria-label="Toggle Menu"
+        >
+          <Menu size={28} />
+        </button>
       </div>
 
-      {/* Mobile menu button */}
-      <button
-        className="flex cursor-pointer items-center lg:hidden"
-        onClick={toggleMenu}
-        aria-label="Toggle Menu"
-      >
-        <Menu size={28} />
-      </button>
-
-      {/* Mobile backdrop */}
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
-          isOpen ? "visible opacity-100" : "invisible opacity-0"
-        } lg:hidden`}
+        className={cn(
+          "fixed inset-0 z-40 transition-opacity duration-300 lg:hidden",
+          isOpen
+            ? "visible opacity-100"
+            : "pointer-events-none invisible opacity-0",
+          // conditional styles based on dark/light mode
+          "bg-black/50 dark:bg-white/10 dark:backdrop-blur-sm",
+        )}
       />
 
-      {/* Mobile Sidebar */}
+      {/* Sidebar */}
       {isOpen && (
         <div
           ref={sidebarRef}
-          className="fixed top-0 right-0 z-50 h-full w-64 bg-white px-6 py-6 shadow-lg lg:hidden dark:bg-gray-800"
+          className="bg-background fixed top-0 right-0 z-50 h-full w-64 px-6 py-6 shadow-lg lg:hidden"
         >
           <div className="mb-6 flex items-center justify-between">
             <span className="text-xl font-bold">Menu</span>
@@ -108,9 +118,10 @@ export default function Navbar() {
                 key={link.id}
                 href={`/${link.to}`}
                 onClick={() => setIsOpen(false)}
-                className={`${
-                  pathname === `/${link.to}` ? "text-lg font-bold" : ""
-                }`}
+                className={cn(
+                  "hover:text-primary text-base transition-colors",
+                  pathname === `/${link.to}` && "font-bold",
+                )}
               >
                 {link.title}
               </Link>
