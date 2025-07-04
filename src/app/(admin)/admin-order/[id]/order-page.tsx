@@ -50,17 +50,6 @@ export default function OneOrderPage() {
       loading: "Updating order status...",
       error: (err) => extractApiError(err),
     });
-    // updateStatus(
-    //   { id: orderId, status: newStatus as OrderStatus },
-    //   {
-    //     onSuccess: (message) => {
-    //       toast.success(message || "Order status updated");
-    //     },
-    //     onError: (err) => {
-    //       toast.error(extractApiError(err));
-    //     },
-    //   },
-    // );
   };
 
   return (
@@ -91,10 +80,10 @@ export default function OneOrderPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{product.name}</h3>
-                  <p className="text-gray-600">
+                  <p>
                     ₦{Number(item.unitPrice).toLocaleString()} × {item.quantity}
                   </p>
-                  <p className="font-medium text-gray-800">
+                  <p className="font-medium italic">
                     ₦{(Number(item.unitPrice) * item.quantity).toLocaleString()}
                   </p>
                 </div>
@@ -117,17 +106,38 @@ export default function OneOrderPage() {
           {/* Shipping Info */}
           <div className="rounded-lg border p-6">
             <h2 className="mb-4 text-2xl font-semibold">Shipping Info</h2>
-            <p className="font-medium">{order.name}</p>
-            <p>{order.address}</p>
-            <p>{order.telephone}</p>
-            <p>{order.email}</p>
-            {order.note ? (
-              <p className="text-muted-foreground italic">{order.note}</p>
-            ) : (
-              <p className="text-muted-foreground italic">
-                Not at the moment, no
-              </p>
-            )}
+
+            <p>
+              <span className="font-medium">Name:</span> {order.name}
+            </p>
+            <p>
+              <span className="font-medium">Address:</span> {order.address}
+            </p>
+            <p>
+              <span className="font-medium">Phone:</span> {order.telephone}
+            </p>
+            <p>
+              <span className="font-medium">Email:</span> {order.email}
+            </p>
+            <p>
+              <span className="font-medium">Delivery Method:</span>{" "}
+              <span className="capitalize">
+                {order.deliveryMethod === "pickup" ? "Pickup" : "Delivery"}
+              </span>
+            </p>
+
+            <p>
+              <span className="font-medium">Note:</span>{" "}
+              {order.note ? (
+                <span className="text-muted-foreground italic">
+                  {order.note}
+                </span>
+              ) : (
+                <span className="text-muted-foreground italic">
+                  Not at the moment, no
+                </span>
+              )}
+            </p>
           </div>
 
           {/* Order Status */}

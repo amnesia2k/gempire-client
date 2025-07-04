@@ -3,17 +3,27 @@
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-// import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useCartStore } from "@/context/cart-store";
 import { useCreateOrder } from "@/lib/hooks/useOrder";
 import { extractApiError } from "@/lib/axios";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useRouter } from "next/navigation";
 
-export default function CheckoutForm() {
-  // const router = useRouter();
+type Props = {
+  deliveryMethod: "delivery" | "pickup";
+  setDeliveryMethod: (val: "delivery" | "pickup") => void;
+};
+
+export default function CheckoutForm({
+  deliveryMethod,
+  setDeliveryMethod,
+}: Props) {
   const { cartItems, clearCart } = useCartStore();
   const { mutateAsync } = useCreateOrder();
+  const router = useRouter();
 
   const [isPending, setIsPending] = useState(false);
 
@@ -30,6 +40,7 @@ export default function CheckoutForm() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    formData.append("deliveryMethod", deliveryMethod);
     formData.append(
       "items",
       JSON.stringify(
@@ -46,8 +57,7 @@ export default function CheckoutForm() {
         toast.success(res.message);
         clearCart();
         form.reset();
-        // You can also redirect somewhere else if needed:
-        // router.push(`/orders/${res.data.orderId}`);
+        router.push(`/success?order-id=${res.data.orderId}`);
       })
       .catch((err) => {
         throw err;
@@ -61,7 +71,7 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4 pt-8" onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 items-center gap-3 md:grid-cols-2">
         <FormField
           label="Your Name"
@@ -86,15 +96,15 @@ export default function CheckoutForm() {
           label="Your Email"
           id="email"
           name="email"
-          placeholder="Enter your email address"
+          placeholder="Enter your email"
           type="email"
           disabled={isPending}
         />
         <FormField
-          label="Your WhatsApp Number"
+          label="WhatsApp Number"
           id="telephone"
           name="telephone"
-          placeholder="i.e. +2347012345678"
+          placeholder="+2347012345678"
           type="text"
           disabled={isPending}
         />
@@ -109,15 +119,38 @@ export default function CheckoutForm() {
         disabled={isPending}
       />
 
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">Delivery Method</Label>
+        <RadioGroup
+          value={deliveryMethod}
+          onValueChange={(val) =>
+            setDeliveryMethod(val as "delivery" | "pickup")
+          }
+          className="flex flex-col space-y-1 md:flex-row md:items-center md:space-y-0 md:space-x-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="delivery"
+              id="delivery"
+              disabled={isPending}
+            />
+            <Label htmlFor="delivery">Delivery</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="pickup" id="pickup" disabled={isPending} />
+            <Label htmlFor="pickup">Pickup</Label>
+          </div>
+        </RadioGroup>
+      </div>
+
       <Button
-        variant="default"
-        size="lg"
         type="submit"
+        size="lg"
         className="w-full justify-center"
         disabled={isPending}
       >
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? "Checking Out..." : "Proceed to Checkout"}
+        {isPending ? "Checking Out..." : "Place Order"}
       </Button>
     </form>
   );

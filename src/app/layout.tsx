@@ -36,6 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster position="top-center" richColors closeButton />
+            {/* <DotLottieReact src="path/to/animation.lottie" loop autoplay /> */}
             {children}
           </ThemeProvider>
         </body>

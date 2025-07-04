@@ -108,6 +108,8 @@ export interface CartItem {
 
 export type OrderStatus = "ordered" | "shipped" | "delivered" | "cancelled";
 
+export type OrderDeliveryMethod = "delivery" | "pickup";
+
 export type OrderItem = {
   _id: string;
   productId: string;
@@ -125,6 +127,7 @@ export type Order = {
   email: string;
   note?: string;
   status: OrderStatus;
+  deliveryMethod: OrderDeliveryMethod;
   createdAt: string;
   items: OrderItem[];
 };
