@@ -1,4 +1,5 @@
 import type { CartItem, Product } from "@/lib/types";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -29,6 +30,8 @@ export const useCartStore = create<CartState>()(
             const currentQuantity =
               updatedItems[existingItemIndex]?.quantity ?? 0;
             const newQuantity = currentQuantity + quantity;
+
+            toast.success(`Added ${product.name} to cart`);
 
             // Don't allow quantity over stock
             if (newQuantity > product.unit) return state;
