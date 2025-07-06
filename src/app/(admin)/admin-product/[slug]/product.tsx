@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cloudinaryBlur } from "@/lib/utils";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Share2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -45,6 +45,15 @@ export default function Product() {
     });
   };
 
+  const handleShare = () => {
+    const message = encodeURIComponent(`Check out this product: ${data?.name}`);
+    const url = encodeURIComponent(
+      `https://store.olatilewa.dev/product/${data?.slug}`,
+    );
+    const whatsappUrl = `https://wa.me/?text=${message}%20-%20${url}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   if (isLoading) return <Loader />;
   if (error) return <p>Error loading product</p>;
   if (!data) return <p>No product found with slug: {productSlug}</p>;
@@ -60,18 +69,22 @@ export default function Product() {
               <MoreVertical className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem asChild>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild className="cursor-pointer">
               {/* onClick={handleEdit} */}
               <Link href={`/admin-product/${data.slug}/edit`}>
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit Product
               </Link>
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleShare} className="cursor-pointer">
+              <Share2 className="mr-2 h-4 w-4" />
+              Share Product
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleDelete}
               disabled={isPending}
-              className="text-red-600 focus:text-red-700"
+              className="cursor-pointer text-red-600 focus:text-red-700"
             >
               <Trash2 className="mr-2 h-4 w-4" />
               {isPending ? "Deleting..." : "Delete Product"}
