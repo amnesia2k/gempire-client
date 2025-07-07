@@ -10,10 +10,10 @@ export default function Success() {
   const orderId = searchParams.get("order-id");
 
   const whatsappText = encodeURIComponent(
-    `Hello! I just placed an order with Order ID: #${orderId}`,
+    `Hello! I just placed an order with Order ID: #${orderId}.`,
   );
 
-  const whatsappLink = `https://wa.me/2347015189425?text=${whatsappText}`;
+  const whatsappLink = `https://wa.me/2348133769036?text=${whatsappText}`;
 
   return (
     <div className="flex flex-col items-center justify-center px-4 text-center">
