@@ -1,5 +1,5 @@
 import { api } from "../axios";
-import type { DashboardResponse } from "../types";
+import type { DashboardResponse, SalesDataResponse } from "../types";
 
 // 📊 Get admin dashboard metrics
 export const getDashboardMetrics = async (): Promise<DashboardResponse> => {
@@ -10,4 +10,18 @@ export const getDashboardMetrics = async (): Promise<DashboardResponse> => {
   }
 
   throw new Error(res.data?.message || "Failed to fetch dashboard metrics");
+};
+
+export const getSalesData = async (
+  period: "month" | "week" | "day" = "month",
+): Promise<SalesDataResponse> => {
+  const res = await api.get<SalesDataResponse>("/sales", {
+    params: { period },
+  });
+
+  if (res.data?.success) {
+    return res.data;
+  }
+
+  throw new Error(res.data?.message || "Failed to fetch sales data");
 };
