@@ -148,3 +148,16 @@ export type UpdateOrderStatusResponse = {
   success: boolean;
   message: string;
 };
+
+export type DashboardMetrics = {
+  totalProducts: string;
+  totalOrders: string;
+  pendingOrders: string;
+  totalSales: string;
+};
+
+export type DashboardResponse = {
+  message: string;
+  success: boolean;
+  data: DashboardMetrics;
+};
