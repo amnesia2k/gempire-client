@@ -4,7 +4,6 @@ import DashHeader from "@/components/dash-header";
 import Loader from "@/components/loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { useDashboardMetrics } from "@/lib/hooks/useMetrics";
-import { ngn } from "@/lib/utils";
 import React from "react";
 
 export default function AdminDashboard() {
@@ -22,17 +21,6 @@ export default function AdminDashboard() {
       </section>
     );
   }
-
-  // if (isError) {
-  //   return (
-  //     <section className="space-y-5">
-  //       <DashHeader text="Dashboard" />
-  //       <div className="flex h-64 items-center justify-center">
-  //         <p className="text-lg">Error: {isError}</p>
-  //       </div>
-  //     </section>
-  //   );
-  // }
 
   const data = m?.data;
 
