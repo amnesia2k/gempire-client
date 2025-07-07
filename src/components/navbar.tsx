@@ -1,3 +1,4 @@
+// @/components/navbar.tsx - MODIFIED CODE
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -21,6 +22,11 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
+  // Function to close the sidebar
+  const closeMobileSidebar = () => {
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -33,6 +39,7 @@ export default function Navbar() {
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      // Only prevent body scroll if the sidebar is open
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -45,11 +52,16 @@ export default function Navbar() {
 
   return (
     <nav className="bg-background relative z-50 flex items-center justify-between px-4 py-4 lg:px-8">
-      <Link href="/" className="text-2xl font-bold">
+      <Link
+        href="/"
+        className="text-2xl font-bold"
+        onClick={closeMobileSidebar}
+      >
         Gempire
       </Link>
 
       {/* Desktop nav */}
+      {/* No changes needed here, as the sidebar is mobile-only */}
       <div className="hidden items-center gap-x-10 lg:flex">
         {navLinks.map((link) => (
           <Link
@@ -67,6 +79,7 @@ export default function Navbar() {
       <div className="flex items-center gap-x-4">
         <ModeToggle />
         <div className="hidden lg:block">
+          {/* Desktop CartIcon - no changes needed for closing the mobile sidebar */}
           <CartIcon variant="outline" />
         </div>
 
@@ -92,7 +105,7 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="fixed inset-0 z-40 bg-black/50 lg:hidden dark:bg-white/10 dark:backdrop-blur-sm"
-              onClick={() => setIsOpen(false)}
+              onClick={closeMobileSidebar} // Close on backdrop click
             />
 
             {/* Sidebar */}
@@ -108,14 +121,19 @@ export default function Navbar() {
               {/* Top row: Close + Cart */}
               <div className="mb-6 flex items-center justify-between">
                 <button
-                  onClick={toggleMenu}
+                  onClick={toggleMenu} // This already closes the menu
                   aria-label="Close menu"
                   className="cursor-pointer"
                 >
                   <X size={28} />
                 </button>
-                {/* No background or outline here — matches desktop */}
-                <CartIcon variant="outline" />
+                {/*
+                  Pass closeMobileSidebar as onClick to CartIcon.
+                  CartIcon's Button component will receive it.
+                  Since CartIcon uses Button asChild and wraps a Link,
+                  the Button component should correctly forward the onClick.
+                */}
+                <CartIcon variant="outline" onClick={closeMobileSidebar} />
               </div>
 
               {/* Navigation Links */}
@@ -124,7 +142,7 @@ export default function Navbar() {
                   <Link
                     key={link.id}
                     href={`/${link.to}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={closeMobileSidebar} // Use the dedicated close function
                     className={`hover:text-primary text-base transition-colors ${
                       pathname === `/${link.to}` ? "font-bold" : ""
                     }`}
