@@ -46,11 +46,8 @@ export default function Product() {
   };
 
   const handleShare = () => {
-    const message = encodeURIComponent(`Check out this product: ${data?.name}`);
-    const url = encodeURIComponent(
-      `https://store.olatilewa.dev/product/${data?.slug}`,
-    );
-    const whatsappUrl = `https://wa.me/?text=${message}%20-%20${url}`;
+    const rawMessage = `Check out this product on our store:\n${data?.name} - https://store.olatilewa.dev/product/${data?.slug}\nPrice: *₦${Number(data?.price).toLocaleString()}*`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(rawMessage)}`;
     window.open(whatsappUrl, "_blank");
   };
 

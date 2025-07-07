@@ -10,7 +10,7 @@ export default function Success() {
   const orderId = searchParams.get("order-id");
 
   const whatsappText = encodeURIComponent(
-    `Hello! I just placed an order with Order ID: #${orderId}.`,
+    `Hello! 👋\n\nI just placed an order on your store 🎉\n\n🧾 Order ID: *#${orderId}*\n\nKindly confirm and share payment details. Thanks! 🙏`,
   );
 
   const whatsappLink = `https://wa.me/2348133769036?text=${whatsappText}`;
