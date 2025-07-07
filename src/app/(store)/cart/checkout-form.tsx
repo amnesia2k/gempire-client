@@ -54,10 +54,10 @@ export default function CheckoutForm({
 
     const orderPromise = mutateAsync(formData)
       .then((res) => {
+        router.push(`/success?order-id=${res.data.orderId}`);
         toast.success(res.message);
         clearCart();
         form.reset();
-        router.push(`/success?order-id=${res.data.orderId}`);
       })
       .catch((err) => {
         throw err;

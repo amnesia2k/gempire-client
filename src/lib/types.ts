@@ -161,3 +161,12 @@ export type DashboardResponse = {
   success: boolean;
   data: DashboardMetrics;
 };
+
+export type SalesDataResponse = {
+  message: string;
+  success: boolean;
+  data: {
+    labels: string[];
+    values: number[];
+  };
+};
