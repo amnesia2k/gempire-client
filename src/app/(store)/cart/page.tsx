@@ -6,7 +6,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Cart | Gempire",
   description: "View and manage your shopping cart items",
-  url: "https://store.olatilewa.dev/cart",
+  canonicalPath: "/cart",
 });
 
 export default function CartPage() {

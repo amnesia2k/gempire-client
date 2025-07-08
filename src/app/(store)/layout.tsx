@@ -19,7 +19,7 @@ const poppins = Poppins({
 export const metadata: Metadata = generateMeta({
   title: "Gempire",
   description: "Gempire is your one-stop shop for all gem-based products.",
-  url: "https://store.olatilewa.dev",
+  canonicalPath: "/",
 });
 
 export const viewport = {

@@ -10,7 +10,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Gempire Products",
   description: "Manage all products in the Gempire Admin Dashboard",
-  url: "https://store.olatilewa.dev/admin-product",
+  canonicalPath: "/admin-product",
 });
 
 export default function AdminProduct() {

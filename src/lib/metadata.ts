@@ -1,28 +1,35 @@
 import type { Metadata } from "next";
 
-const gempire = "./gempire-meta.jpeg";
+const fallbackImage = "/gempire-meta.jpeg"; // Must be in /public
 
 interface Options {
   title: string;
   description: string;
   image?: string;
   url?: string;
+  canonicalPath?: string; // Optional canonical override
 }
 
 export function generateMeta({
   title,
   description,
-  image = gempire,
+  image = fallbackImage,
   url = "https://store.olatilewa.dev",
+  canonicalPath = "/",
 }: Options): Metadata {
+  const fullUrl = `${url.replace(/\/$/, "")}${canonicalPath}`;
+
   return {
     title,
     description,
     metadataBase: new URL(url),
+    alternates: {
+      canonical: fullUrl,
+    },
     openGraph: {
       title,
       description,
-      url,
+      url: fullUrl,
       siteName: "Gempire",
       images: [image],
       type: "website",
