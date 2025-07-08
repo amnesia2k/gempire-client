@@ -1,6 +1,14 @@
 "use client";
 
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useParams } from "next/navigation";
+import { toast } from "sonner";
+import { Pencil, Share2, Trash2, MoreVertical } from "lucide-react";
+
 import { useDeleteProduct, useProductBySlug } from "@/lib/hooks/useProduct";
+import { cloudinaryBlur } from "@/lib/utils";
 import DashHeader from "@/components/dash-header";
 import Loader from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
@@ -11,37 +19,44 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cloudinaryBlur } from "@/lib/utils";
-import { MoreVertical, Pencil, Share2, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import React from "react";
-import { toast } from "sonner";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { extractApiError } from "@/lib/axios";
 
 export default function Product() {
   const { slug } = useParams();
   const productSlug = typeof slug === "string" ? slug : undefined;
 
   const { data, isLoading, error } = useProductBySlug(productSlug);
-
-  const { mutate: deleteProduct, isPending } = useDeleteProduct();
+  const { mutateAsync } = useDeleteProduct();
   const router = useRouter();
 
-  const handleDelete = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this product?",
-    );
-    if (!confirmed || !data?._id) return;
+  const [open, setOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [isPending, setIsPending] = useState(false);
 
-    deleteProduct(data._id, {
-      onSuccess: () => {
-        toast.success("Product deleted successfully!");
-        router.push("/admin-product"); // Change this to wherever the product list is
+  const handleDeleteConfirmed = () => {
+    if (!data?._id) return;
+
+    const createPromise = mutateAsync(data._id)
+      // .then((message) => toast.success(message))
+      .finally(() => setIsPending(false));
+
+    toast.promise(createPromise, {
+      success: (message) => {
+        setOpen(false);
+        router.push("/admin-product");
+        return message;
       },
-      onError: (err) => {
-        toast.error(err.message || "Failed to delete product");
-      },
+      loading: "Deleting product...",
+      error: (err) => extractApiError(err),
     });
   };
 
@@ -66,26 +81,64 @@ export default function Product() {
               <MoreVertical className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild className="cursor-pointer">
-              {/* onClick={handleEdit} */}
               <Link href={`/admin-product/${data.slug}/edit`}>
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit Product
               </Link>
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={handleShare} className="cursor-pointer">
               <Share2 className="mr-2 h-4 w-4" />
               Share Product
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleDelete}
-              disabled={isPending}
-              className="cursor-pointer text-red-600 focus:text-red-700"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              {isPending ? "Deleting..." : "Delete Product"}
-            </DropdownMenuItem>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                <DialogTrigger asChild>
+                  <button className="flex w-full items-center text-red-600">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Product
+                  </button>
+                </DialogTrigger>
+              </DropdownMenuItem>
+
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Delete Product</DialogTitle>
+                  <p className="text-muted-foreground text-sm">
+                    This action cannot be undone. Type{" "}
+                    <span className="font-semibold">{data.name}</span> to
+                    confirm.
+                  </p>
+                </DialogHeader>
+
+                <Input
+                  placeholder="Enter product name"
+                  value={confirmText}
+                  onChange={(e) => setConfirmText(e.target.value)}
+                />
+
+                <DialogFooter className="mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setOpen(false)}
+                    disabled={isPending}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    disabled={confirmText.trim() !== data.name || isPending}
+                    onClick={handleDeleteConfirmed}
+                  >
+                    {isPending ? "Deleting..." : "Delete"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -132,11 +185,6 @@ export default function Product() {
           </p>
           <p className="text-lg">{data.description}</p>
         </div>
-
-        {/* <div className="border-t pt-6">
-          <p className="text-muted-foreground text-sm font-medium">Category</p>
-          <p className="text-lg">{data.category?.name ?? "Uncategorized"}</p>
-        </div> */}
       </div>
     </section>
   );

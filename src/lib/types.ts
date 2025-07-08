@@ -170,3 +170,18 @@ export type SalesDataResponse = {
     values: number[];
   };
 };
+
+export interface PeriodInterface {
+  value: "month" | "week" | "day";
+  label: string;
+}
+
+export interface YAxisTickPayload {
+  value: number | string;
+}
+
+export interface CustomYAxisTickProps {
+  x?: number;
+  y?: number;
+  payload?: YAxisTickPayload;
+}

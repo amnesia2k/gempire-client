@@ -85,7 +85,7 @@ export default function Navbar() {
 
         {/* Mobile menu button */}
         <button
-          className="flex items-center lg:hidden"
+          className="flex cursor-pointer items-center lg:hidden"
           onClick={toggleMenu}
           aria-label="Toggle Menu"
         >
