@@ -4,6 +4,14 @@ import { PlusSquare } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import ProductTable from "./product-table";
+import type { Metadata } from "next";
+import { generateMeta } from "@/lib/metadata";
+
+export const metadata: Metadata = generateMeta({
+  title: "Gempire Products",
+  description: "Manage all products in the Gempire Admin Dashboard",
+  url: "https://store.olatilewa.dev/admin-product",
+});
 
 export default function AdminProduct() {
   return (
