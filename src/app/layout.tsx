@@ -40,7 +40,7 @@ export default function RootLayout({
                 "@type": "Organization",
                 name: "Gempire",
                 url: "https://store.olatilewa.dev",
-                logo: "https://store.olatilewa.dev/logo.png",
+                logo: "https://store.olatilewa.dev/gempire-meta.jpeg",
                 sameAs: [
                   "https://instagram.com/gempire.ng",
                   "https://facebook.com/gempire.ng",

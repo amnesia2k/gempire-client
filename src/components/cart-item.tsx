@@ -6,6 +6,7 @@ import type { CartItem as CartItemType } from "@/lib/types";
 import { useCartStore } from "@/context/cart-store";
 import { Button } from "./ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface CartItemProps {
   item: CartItemType;
@@ -24,11 +25,16 @@ export function CartItem({ item }: CartItemProps) {
     updateQuantity(item.product._id, item.quantity - 1);
   };
 
+  const handleRemove = () => {
+    removeFromCart(item.product._id);
+    toast.success(`Removed ${item.product.name} from cart`);
+  };
+
   return (
     <div className="bg-card flex flex-wrap items-center gap-4 rounded-lg border p-4 md:flex-nowrap">
       <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
         <Image
-          src={item.product.images[0]!.imageUrl}
+          src={item.product.images[0]?.imageUrl ?? "/fallback.jpg"}
           alt={item.product.name}
           fill
           className="object-cover"
@@ -77,11 +83,7 @@ export function CartItem({ item }: CartItemProps) {
       </div>
 
       <div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => removeFromCart(item.product._id)}
-        >
+        <Button variant="ghost" size="icon" onClick={handleRemove}>
           <Trash2 className="text-muted-foreground hover:text-destructive h-5 w-5" />
           <span className="sr-only">Remove item</span>
         </Button>

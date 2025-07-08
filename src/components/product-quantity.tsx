@@ -18,16 +18,23 @@ export function ProductQuantity({ product }: ProductQuantityProps) {
 
   const handleAddToCart = () => {
     if (quantity > product.unit) {
-      // toast({
-      //   title: "Not enough stock",
-      //   description: `Only ${product.unit} items available.`,
-      //   variant: "destructive",
-      // });
       toast.error(`Only ${product.unit} items available.`);
       return;
     }
+
+    const previousQuantity = useCartStore
+      .getState()
+      .getProductQuantity(product._id);
+
     addToCart(product, quantity);
     setQuantity(1);
+
+    // ✅ Fire toast here AFTER cart has updated
+    const newQuantity = useCartStore.getState().getProductQuantity(product._id);
+
+    if (newQuantity > previousQuantity) {
+      toast.success(`Added ${product.name} to cart`);
+    }
   };
 
   const increment = () => {

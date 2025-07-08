@@ -46,15 +46,14 @@ export default function Product() {
     if (!data?._id) return;
 
     const createPromise = mutateAsync(data._id)
-      // .then((message) => toast.success(message))
+      .then((r) => {
+        toast.success(r.message);
+        setOpen(false);
+        router.push("/admin-product");
+      })
       .finally(() => setIsPending(false));
 
     toast.promise(createPromise, {
-      success: (message) => {
-        setOpen(false);
-        router.push("/admin-product");
-        return message;
-      },
       loading: "Deleting product...",
       error: (err) => extractApiError(err),
     });

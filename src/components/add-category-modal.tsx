@@ -23,22 +23,26 @@ export const AddCategoryModal = ({
   setOpen: (val: boolean) => void;
 }) => {
   const [name, setName] = useState("");
-  const { mutate, isPending } = useCreateCategory();
+  const { mutateAsync } = useCreateCategory();
+
+  const [isPending, setIsPending] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsPending(true);
+
     if (!name.trim()) return;
 
-    mutate(name, {
-      onSuccess: (category) => {
-        toast.success(category.message || "Category created 🎉");
-        setName("");
-        setOpen(false);
-      },
-      onError: (error) => {
-        toast.error(extractApiError(error));
-      },
+    const createPromise = mutateAsync(name)
+      .then((s) => toast.success(s.message))
+      .finally(() => {
+        setIsPending(false);
+      });
+
+    toast.promise(createPromise, {
+      loading: "Creating category...",
+      error: (err) => extractApiError(err),
     });
   };
 
