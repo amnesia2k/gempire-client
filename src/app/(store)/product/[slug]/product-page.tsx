@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { ProductQuantity } from "@/components/product-quantity";
 import { Badge } from "@/components/ui/badge";
+import Script from "next/script";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -15,13 +16,44 @@ export default function ProductPage() {
   const { data: product, isLoading, error } = useProductBySlug(productSlug);
 
   if (isLoading) return <Loader />;
-
   if (error) return <p>Error: {error.message}</p>;
-
   if (!product) return <p>No product found with slug: {productSlug}</p>;
+
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product.name,
+    image: product.images?.map((img) => img.imageUrl) || ["/fallback.jpg"],
+    description: product.description,
+    sku: product.productId || product._id,
+    brand: {
+      "@type": "Brand",
+      name: "Gempire",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://store.olatilewa.dev/product/${product.slug}`,
+      priceCurrency: "NGN",
+      price: product.price,
+      itemCondition: "https://schema.org/NewCondition",
+      availability:
+        product.unit > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
+  };
 
   return (
     <div className="mx-auto">
+      {/* JSON-LD Structured Data */}
+      <Script
+        id="jsonld-product"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <ProductImages images={product.images} alt={product.name} />
 

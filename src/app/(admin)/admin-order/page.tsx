@@ -7,7 +7,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Gempire Orders",
   description: "Manage all orders in the Gempire Admin Dashboard",
-  url: "https://store.olatilewa.dev/admin-order",
+  canonicalPath: "/admin-order",
 });
 
 export default function AdminOrder() {

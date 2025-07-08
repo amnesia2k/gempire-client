@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product.name,
       description: product.description,
       image: firstImage,
-      url: `https://store.olatilewa.dev/product/${product.slug}`,
+      canonicalPath: `/product/${product.slug}`,
     });
   } catch (err) {
     console.error("Error generating metadata:", err);

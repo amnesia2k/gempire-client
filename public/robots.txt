@@ -1,0 +1,19 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /admin-dashboard
+Disallow: /admin-dashboard/*
+Disallow: /admin-order
+Disallow: /admin-order/*
+Disallow: /admin-product
+Disallow: /admin-product/*
+Disallow: /dash-access
+
+# Host
+Host: https://store.olatilewa.dev
+
+# Sitemaps
+Sitemap: https://store.olatilewa.dev/sitemap.xml

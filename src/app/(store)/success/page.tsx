@@ -7,7 +7,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Order Success | Gempire",
   description: "Your order has been successfully placed",
-  url: "https://store.olatilewa.dev/success",
+  canonicalPath: "/success",
 });
 
 export default function SuccessPage() {

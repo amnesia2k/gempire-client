@@ -6,7 +6,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Gempire Dashboard",
   description: "This is the Admin Dashboard for Gempire",
-  url: "https://store.olatilewa.dev/admin-dashboard",
+  canonicalPath: "/admin-dashboard",
 });
 
 export const viewport = {

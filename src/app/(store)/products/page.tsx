@@ -7,7 +7,7 @@ import { generateMeta } from "@/lib/metadata";
 export const metadata: Metadata = generateMeta({
   title: "Products | Gempire",
   description: "Browse and shop for products on Gempire",
-  url: "https://store.olatilewa.dev/products",
+  canonicalPath: "/products",
 });
 
 export default function ProductsPage() {
