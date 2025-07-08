@@ -33,25 +33,17 @@ export function NavUser({
   const { isMobile } = useSidebar();
   const router = useRouter();
 
-  const { mutate: logout } = useLogoutAdmin();
+  const { mutateAsync } = useLogoutAdmin();
 
-  const handleLogout = () => {
-    const logoutPromise = new Promise((resolve, reject) => {
-      logout(undefined, {
-        onSuccess: (res) => {
-          resolve(res); // ✅ triggers success toast
-          document.cookie = "admin-token=; path=/; max-age=0";
-          router.push("/dash-access");
-        },
-        onError: (err) => {
-          reject(err); // ❌ triggers error toast
-        },
-      });
+  const handleLogout = async () => {
+    const logoutPromise = mutateAsync().then((r) => {
+      document.cookie = "admin-token=; path=/; max-age=0";
+      router.push("/dash-access");
+      toast.success(r.message);
     });
 
     toast.promise(logoutPromise, {
       loading: "Logging out...",
-      success: "Logged out successfully 👋",
       error: (err) => extractApiError(err),
     });
   };

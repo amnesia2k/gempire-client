@@ -61,11 +61,11 @@ export const editProduct = async (
   throw new Error(res.data?.message || "Failed to update product");
 };
 
-export const deleteProduct = async (id: string): Promise<string> => {
+export const deleteProduct = async (id: string): Promise<DeleteResponse> => {
   const res = await api.delete<DeleteResponse>(`/product/${id}`);
 
   if (res.data?.success) {
-    return res.data.message;
+    return res.data;
   }
 
   throw new Error(res.data?.message || "Failed to delete product");
