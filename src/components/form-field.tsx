@@ -48,7 +48,7 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
           required={required}
           rows={rows}
           disabled={disabled} // 👈 here
-          className="resize-none p-5"
+          className="h-[150px] resize-none p-5"
           defaultValue={props.defaultValue}
         />
       </div>

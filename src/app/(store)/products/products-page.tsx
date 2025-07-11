@@ -33,12 +33,8 @@ export default function ProductsPage() {
   const products = categoryData?.products ?? [];
   const totalPages = categoryData?.totalPages ?? 1;
 
-  console.log("Products:", products);
-
   return (
     <div className="space-y-5">
-      <h1 className="text-center text-4xl">Our Collections</h1>
-
       <div className="flex items-center justify-between">
         <CategoryFilter />
         <div className="space-x-2">
