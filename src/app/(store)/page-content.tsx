@@ -10,15 +10,16 @@ export default function PageContent() {
   if (isLoading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!products || products.length === 0) {
+  const prod = products?.data ?? [];
+  console.log("Products:", prod);
+
+  if (!prod || prod.length === 0) {
     return <div>No products found</div>;
   }
 
   return (
-    <div className="space-y-5">
-      <h1 className="text-center text-4xl">New Arrivals</h1>
-
-      <ProductGrid products={products} />
+    <div>
+      <ProductGrid products={prod} />
     </div>
   );
 }

@@ -7,7 +7,9 @@ import Loader from "@/components/loader";
 import React from "react";
 
 export default function ProductTable() {
-  const { data: products = [], isLoading } = useProducts();
+  const { data, isLoading } = useProducts();
+
+  const products = data?.data ?? [];
 
   return (
     <div className="mt-8">

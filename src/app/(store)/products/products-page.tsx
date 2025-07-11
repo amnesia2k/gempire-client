@@ -35,8 +35,6 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-center text-4xl">Our Collections</h1>
-
       <div className="flex items-center justify-between">
         <CategoryFilter />
         <div className="space-x-2">
