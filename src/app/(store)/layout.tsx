@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { generateMeta } from "@/lib/metadata";
 import { type Metadata } from "next";
@@ -36,10 +37,11 @@ export default function StoreLayout({
   return (
     <>
       <div
-        className={`${inter.variable} ${poppins.variable} mx-auto max-w-7xl`}
+        className={`${inter.variable} ${poppins.variable} mx-auto flex min-h-screen max-w-7xl flex-col`}
       >
         <Navbar />
-        {children}
+        <main className="flex-grow">{children}</main>
+        <Footer />
       </div>
     </>
   );

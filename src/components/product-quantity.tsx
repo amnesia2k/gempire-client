@@ -7,6 +7,7 @@ import { Badge } from "./ui/badge";
 import { useCartStore } from "@/context/cart-store";
 import type { Product } from "@/lib/types";
 import { toast } from "sonner";
+import AddToCart from "./atc-btn";
 
 interface ProductQuantityProps {
   product: Product;
@@ -80,9 +81,7 @@ export function ProductQuantity({ product }: ProductQuantityProps) {
           <Plus className="h-4 w-4" />
         </Button>
       </div>
-      <Button size="lg" onClick={handleAddToCart}>
-        Add to Cart
-      </Button>
+      <AddToCart handleAddToCart={handleAddToCart} />
     </div>
   );
 }

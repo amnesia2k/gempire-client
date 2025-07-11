@@ -6,11 +6,11 @@ import type {
   Product,
 } from "../types";
 
-export const getAllProducts = async (): Promise<Product[]> => {
+export const getAllProducts = async (): Promise<GetAllProductsResponse> => {
   const res = await api.get<GetAllProductsResponse>("/products");
 
   if (res.data?.success) {
-    return res.data.data;
+    return res.data;
   }
 
   throw new Error(res.data?.message || "Something went wrong");
