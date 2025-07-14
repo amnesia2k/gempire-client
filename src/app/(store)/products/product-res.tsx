@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCategoryBySlug } from "@/lib/hooks/useCategory";
-import Loader from "@/components/loader";
 import { ProductGrid } from "@/components/product-grid";
 
 export function ProductResults() {
@@ -11,13 +10,11 @@ export function ProductResults() {
   const selectedCategory = searchParams.get("category") ?? "all";
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
-  const {
-    data: categoryData,
-    isLoading,
-    error,
-  } = useCategoryBySlug(selectedCategory, currentPage);
+  const { data: categoryData, error } = useCategoryBySlug(
+    selectedCategory,
+    currentPage,
+  );
 
-  if (isLoading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
 
   const products = categoryData?.products ?? [];

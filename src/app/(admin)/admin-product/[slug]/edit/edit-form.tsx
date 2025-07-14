@@ -19,8 +19,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Loader from "@/components/loader";
 import { extractApiError } from "@/lib/axios";
+import SplashLoader from "@/components/splash-loader";
 
 interface Props {
   slug: string;
@@ -140,7 +140,9 @@ export default function EditProductForm({ slug }: Props) {
   };
 
   if (isLoading || !categories || !productData) {
-    return <Loader />;
+    return (
+      <SplashLoader classes="min-h-[calc(80vh-200px)] flex items-center justify-center" />
+    );
   }
 
   return (

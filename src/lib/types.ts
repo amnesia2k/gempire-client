@@ -185,3 +185,14 @@ export interface CustomYAxisTickProps {
   y?: number;
   payload?: YAxisTickPayload;
 }
+
+export type SendEmailPayload = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+export type EmailResponse = {
+  message: string;
+  success: boolean;
+};

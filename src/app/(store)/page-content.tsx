@@ -1,13 +1,11 @@
 "use client";
 
-import Loader from "@/components/loader";
 import { useProducts } from "@/lib/hooks/useProduct";
 import { ProductGrid } from "@/components/product-grid";
 
 export default function PageContent() {
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products, error } = useProducts();
 
-  if (isLoading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
 
   const prod = products?.data ?? [];

@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import Products from "./products-page";
-import Loader from "@/components/loader";
 import type { Metadata } from "next";
 import { generateMeta } from "@/lib/metadata";
+import SplashLoader from "@/components/splash-loader";
 
 export const metadata: Metadata = generateMeta({
   title: "Products | Gempire",
@@ -15,7 +15,11 @@ export default function ProductsPage() {
     <section className="space-y-5 p-5">
       <h1 className="text-center text-4xl">Our Collections</h1>
 
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <SplashLoader classes="flex h-screen w-full items-center justify-center" />
+        }
+      >
         <Products />
       </Suspense>
     </section>

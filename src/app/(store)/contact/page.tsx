@@ -1,31 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import React, { useRef, useState } from "react";
+import { sendForm } from "@emailjs/browser";
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Simulate submit
-    await new Promise((r) => setTimeout(r, 1000));
+    if (!formRef.current) return;
+    setIsPending(true);
 
-    toast.success("Message sent!");
-    setForm({ name: "", email: "", message: "" });
-    setIsLoading(false);
+    try {
+      await sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        formRef.current,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+      );
+
+      toast.success("Email sent successfully!");
+      formRef.current.reset();
+      router.refresh();
+    } catch (err) {
+      console.error("EMAILJS error:", err);
+
+      const error = err as { text?: string; message?: string };
+      const errorMsg =
+        typeof error === "object" && error?.text
+          ? error.text
+          : (error?.message ?? "Something went wrong");
+
+      toast.error("Failed to send email: " + errorMsg);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -41,6 +58,7 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         {/* 📬 Contact Form */}
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="bg-card h-fit space-y-6 rounded-lg border p-6 shadow-sm"
         >
@@ -52,8 +70,7 @@ export default function ContactPage() {
             name="name"
             placeholder="Your Name"
             required
-            defaultValue={form.name}
-            // onChange={handleChange}
+            disabled={isPending}
           />
 
           <FormField
@@ -63,8 +80,7 @@ export default function ContactPage() {
             placeholder="your@email.com"
             required
             type="email"
-            defaultValue={form.email}
-            // onChange={handleChange}
+            disabled={isPending}
           />
 
           <FormField
@@ -74,17 +90,16 @@ export default function ContactPage() {
             name="message"
             placeholder="Write your message here..."
             required
-            defaultValue={form.message}
-            // onChange={handleChange}
+            disabled={isPending}
           />
 
           <Button
             type="submit"
             size="lg"
             className="w-full"
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading ? "Sending..." : "Send Message"}
+            {isPending ? "Sending..." : "Send Message"}
           </Button>
         </form>
 
@@ -132,17 +147,8 @@ export default function ContactPage() {
           </div>
 
           <div className="aspect-[4/3] overflow-hidden rounded-lg border shadow-sm">
-            {/* <iframe
-              title="Store Location"
-              src="https://maps.google.com/maps?q=floral%20city%20bouquet&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              className="h-full w-full"
-              loading="lazy"
-              allowFullScreen
-            ></iframe> */}
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.023746372874!2d4.455795875272411!3d7.680595492336405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10382bf4cfc23a5d%3A0xdc6c4b4c1b582ddf!2sRedeemer&#39;s%20University%20Ede!5e0!3m2!1sen!2sus!4v1752238689560!5m2!1sen!2sus"
-              // width="400"
-              // height="300"
               title="Store Location"
               className="h-full w-full"
               loading="lazy"

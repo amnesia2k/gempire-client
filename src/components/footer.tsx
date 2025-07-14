@@ -7,7 +7,9 @@ export default function Footer() {
       <div className="grid grid-cols-1 gap-8 pb-3 md:grid-cols-4">
         {/* Column 1: About */}
         <div className="md:col-span-2">
-          <h3 className="font-headline mb-4 text-xl">Gempire</h3>
+          <Link href="/" className="mb-5 text-3xl font-bold">
+            Gempire
+          </Link>
           <p className="max-w-md">
             Where scent meets identity. We handpick standout fragrances that
             express you; bold, soft, or somewhere in between. Scents that linger

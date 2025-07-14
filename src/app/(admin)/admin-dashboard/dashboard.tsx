@@ -1,7 +1,6 @@
 "use client";
 
 import DashHeader from "@/components/dash-header";
-import Loader from "@/components/loader";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
@@ -22,6 +21,7 @@ import {
 } from "recharts";
 import React, { useState, type FC } from "react";
 import type { CustomYAxisTickProps, PeriodInterface } from "@/lib/types";
+import SplashLoader from "@/components/splash-loader";
 
 export default function AdminDashboard() {
   const [period, setPeriod] = useState<"month" | "week" | "day">("month");
@@ -84,7 +84,10 @@ export default function AdminDashboard() {
 
       {loadingMetrics ? (
         <div className="flex h-64 items-center justify-center">
-          <Loader />
+          <SplashLoader
+            classes="flex min-h-[calc(100vh-200px)] items-center justify-center"
+            text="Loading Metrics..."
+          />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -146,7 +149,7 @@ export default function AdminDashboard() {
       <div className="bg-card text-card-foreground rounded-lg border p-2 shadow-sm">
         {loadingChart ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader />
+            <SplashLoader />
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
