@@ -13,7 +13,9 @@ export const metadata: Metadata = generateMeta({
 export default function ProductsPage() {
   return (
     <section className="space-y-5 p-5">
-      <h1 className="text-center text-4xl">Our Collections</h1>
+      <h1 className="text-center text-3xl font-bold md:text-4xl">
+        Our Collections
+      </h1>
 
       <Suspense
         fallback={

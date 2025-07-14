@@ -1,4 +1,3 @@
-// @/components/navbar.tsx - MODIFIED CODE
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -8,12 +7,18 @@ import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import CartIcon from "./cart-icon";
 import { ModeToggle } from "./mode-toggle";
+import { Macondo } from "next/font/google";
 
 const navLinks = [
   { id: 1, title: "Home", to: "" },
   { id: 2, title: "Products", to: "products" },
   { id: 3, title: "Contact", to: "contact" },
 ];
+
+const macondo = Macondo({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -54,7 +59,7 @@ export default function Navbar() {
     <nav className="bg-background relative z-50 flex items-center justify-between px-4 py-4 lg:px-8">
       <Link
         href="/"
-        className="text-2xl font-bold"
+        className={`text-3xl font-bold ${macondo.className}`}
         onClick={closeMobileSidebar}
       >
         Gempire
@@ -67,8 +72,10 @@ export default function Navbar() {
           <Link
             key={link.id}
             href={`/${link.to}`}
-            className={`hover:text-primary text-sm transition-colors ${
-              pathname === `/${link.to}` ? "text-lg font-bold" : ""
+            className={`transition-colors ${
+              pathname === `/${link.to}`
+                ? "text-xl font-bold"
+                : "hover:text-primary text-base hover:font-medium"
             }`}
           >
             {link.title}

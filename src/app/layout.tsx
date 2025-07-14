@@ -5,18 +5,17 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import Script from "next/script";
 
-import { Macondo, Zain } from "next/font/google";
+import {
+  // DM_Serif_Display,
+  // Gloock,
+  // Macondo,
+  Quicksand,
+  // Zain,
+} from "next/font/google";
 
-const macondo = Macondo({
+const quicksand = Quicksand({
+  weight: "500",
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--display-family",
-});
-
-const zain = Zain({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--text-family",
 });
 
 export default function RootLayout({
@@ -26,7 +25,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${macondo.variable} ${zain.variable}`}
+        className={`${quicksand.className}`}
         suppressHydrationWarning
       >
         <head>
