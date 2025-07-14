@@ -1,13 +1,19 @@
 import Link from "next/link";
 import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Macondo } from "next/font/google";
+
+const macondo = Macondo({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default function Footer() {
   return (
-    <footer className="px-4 py-5 lg:px-8">
+    <footer className="px-4 pb-5 lg:px-8">
       <div className="grid grid-cols-1 gap-8 pb-3 md:grid-cols-4">
         {/* Column 1: About */}
-        <div className="md:col-span-2">
-          <Link href="/" className="mb-5 text-3xl font-bold">
+        <div className="flex flex-col space-y-5 md:col-span-2">
+          <Link href="/" className={`text-3xl font-bold ${macondo.className}`}>
             Gempire
           </Link>
           <p className="max-w-md">
@@ -18,8 +24,8 @@ export default function Footer() {
         </div>
 
         {/* Column 2: Quick Links */}
-        <div>
-          <h4 className="mb-4 font-semibold">Explore</h4>
+        <div className="space-y-2">
+          <h4 className="text-lg font-bold">Explore</h4>
           <ul className="space-y-2">
             <li>
               <Link
@@ -49,8 +55,8 @@ export default function Footer() {
         </div>
 
         {/* Column 3: Social */}
-        <div>
-          <h4 className="mb-4 font-semibold">Follow Us</h4>
+        <div className="space-y-2">
+          <h4 className="text-lg font-bold">Follow Us</h4>
           <div className="flex space-x-4">
             <Link
               href="#"
@@ -80,10 +86,13 @@ export default function Footer() {
       <div className="border-border flex flex-col items-center justify-between border-t pt-5 text-sm md:flex-row">
         <p>&copy; {new Date().getFullYear()} Gempire. All rights reserved.</p>
         <div className="mt-4 flex space-x-4 md:mt-0">
-          <Link href="#" className="hover:text-primary transition-colors">
+          <Link
+            href="/privacy-policy"
+            className="hover:text-primary transition-colors"
+          >
             Privacy Policy
           </Link>
-          <Link href="#" className="hover:text-primary transition-colors">
+          <Link href="/tos" className="hover:text-primary transition-colors">
             Terms of Service
           </Link>
         </div>
