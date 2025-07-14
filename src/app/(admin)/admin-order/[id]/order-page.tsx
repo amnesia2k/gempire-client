@@ -1,6 +1,5 @@
 "use client";
 
-import Loader from "@/components/loader";
 import { useOrderById, useUpdateOrderStatus } from "@/lib/hooks/useOrder";
 import { useParams } from "next/navigation";
 import Image from "next/image";
@@ -16,6 +15,7 @@ import {
 import type { OrderStatus } from "@/lib/types";
 import { toast } from "sonner";
 import { extractApiError } from "@/lib/axios";
+import SplashLoader from "@/components/splash-loader";
 
 export default function OneOrderPage() {
   const { id } = useParams();
@@ -26,7 +26,13 @@ export default function OneOrderPage() {
 
   const [isPending, setIsPending] = useState(false);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <SplashLoader
+        text="Loading order..."
+        classes="min-h-[calc(70vh-200px)] flex items-center justify-center"
+      />
+    );
   if (error) return <p>Error loading order</p>;
   if (!data) return <p>No order found with ID: {orderId}</p>;
 

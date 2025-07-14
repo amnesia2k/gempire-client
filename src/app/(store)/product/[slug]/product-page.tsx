@@ -1,13 +1,13 @@
 "use client";
 
 import { useProductBySlug } from "@/lib/hooks/useProduct";
-import Loader from "@/components/loader";
 import ProductImages from "@/components/product-images";
 import { useParams } from "next/navigation";
 import React from "react";
 import { ProductQuantity } from "@/components/product-quantity";
 import { Badge } from "@/components/ui/badge";
 import Script from "next/script";
+import SplashLoader from "@/components/splash-loader";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -15,7 +15,10 @@ export default function ProductPage() {
 
   const { data: product, isLoading, error } = useProductBySlug(productSlug);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <SplashLoader classes="flex min-h-[calc(100vh-200px)] w-full items-center justify-center" />
+    );
   if (error) return <p>Error: {error.message}</p>;
   if (!product) return <p>No product found with slug: {productSlug}</p>;
 

@@ -10,7 +10,6 @@ import { Pencil, Share2, Trash2, MoreVertical } from "lucide-react";
 import { useDeleteProduct, useProductBySlug } from "@/lib/hooks/useProduct";
 import { cloudinaryBlur } from "@/lib/utils";
 import DashHeader from "@/components/dash-header";
-import Loader from "@/components/loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { extractApiError } from "@/lib/axios";
+import SplashLoader from "@/components/splash-loader";
 
 export default function Product() {
   const { slug } = useParams();
@@ -65,7 +65,13 @@ export default function Product() {
     window.open(whatsappUrl, "_blank");
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <SplashLoader
+        text="Loading product..."
+        classes="min-h-[calc(70vh-200px)] flex items-center justify-center"
+      />
+    );
   if (error) return <p>Error loading product</p>;
   if (!data) return <p>No product found with slug: {productSlug}</p>;
 

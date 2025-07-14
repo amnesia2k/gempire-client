@@ -2,7 +2,6 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCategoryBySlug } from "@/lib/hooks/useCategory";
-import Loader from "@/components/loader";
 import { CategoryFilter } from "@/components/category-filter";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -15,11 +14,10 @@ export default function ProductsPage() {
   const selectedCategory = searchParams.get("category") ?? "all";
   const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
-  const {
-    data: categoryData,
-    isLoading,
-    error,
-  } = useCategoryBySlug(selectedCategory, currentPage);
+  const { data: categoryData, error } = useCategoryBySlug(
+    selectedCategory,
+    currentPage,
+  );
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
@@ -27,7 +25,6 @@ export default function ProductsPage() {
     router.push(`?${params.toString()}`);
   };
 
-  if (isLoading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
 
   const products = categoryData?.products ?? [];

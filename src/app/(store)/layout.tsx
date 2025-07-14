@@ -1,9 +1,8 @@
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
 import { generateMeta } from "@/lib/metadata";
 import { type Metadata } from "next";
 
 import { Inter, Poppins } from "next/font/google";
+import StoreLayoutWrapper from "./store-layout-wrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,12 +35,8 @@ export default function StoreLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <div
-        className={`${inter.variable} ${poppins.variable} mx-auto flex min-h-screen max-w-7xl flex-col`}
-      >
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <div className={`${inter.variable} ${poppins.variable}`}>
+        <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
       </div>
     </>
   );
