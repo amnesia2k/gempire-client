@@ -11,6 +11,7 @@ import { extractApiError } from "@/lib/axios";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
+import { initPayment } from "@/lib/api/payment";
 
 type Props = {
   deliveryMethod: "delivery" | "pickup";
@@ -21,7 +22,7 @@ export default function CheckoutForm({
   deliveryMethod,
   setDeliveryMethod,
 }: Props) {
-  const { cartItems, clearCart } = useCartStore();
+  const { cartItems } = useCartStore();
   const { mutateAsync } = useCreateOrder();
   const router = useRouter();
 
@@ -47,27 +48,48 @@ export default function CheckoutForm({
         cartItems.map((item) => ({
           productId: item.product._id,
           quantity: item.quantity,
-          unitPrice: item.product.unit,
+          unitPrice: item.product.price, // <-- Use actual price field here
         })),
       ),
     );
 
-    const orderPromise = mutateAsync(formData)
-      .then((res) => {
-        router.push(`/success?order-id=${res.data.orderId}`);
-        toast.success(res.message);
-        clearCart();
-        form.reset();
-      })
-      .catch((err) => {
-        throw err;
-      })
-      .finally(() => setIsPending(false));
+    try {
+      // Step 1: Create order
+      const orderRes = await mutateAsync(formData);
+      const orderId = orderRes.data.orderId;
+      const name = orderRes.data.name;
+      const email = orderRes.data.email;
 
-    toast.promise(orderPromise, {
-      loading: "Placing order...",
-      error: (err) => extractApiError(err),
-    });
+      // Step 2: Calculate total amount in Naira
+      const amount = cartItems.reduce(
+        (total, item) => total + Number(item.product.price) * item.quantity,
+        0,
+      );
+
+      console.log("💰 Calculated total amount:", amount);
+
+      // Step 3: Initialize payment (amount in kobo)
+      const paymentRes = await initPayment({
+        email,
+        amount: amount * 100, // Paystack wants kobo, so multiply by 100
+        subaccount: "ACCT_40m22ih8x2mb2b0", // or fetch dynamically
+        orderId,
+        metadata: {
+          name,
+          email,
+          orderId,
+        },
+      });
+
+      const { authorization_url } = paymentRes.data;
+
+      // Step 4: Redirect to Paystack
+      window.location.href = authorization_url;
+    } catch (err) {
+      toast.error(extractApiError(err));
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -80,6 +102,7 @@ export default function CheckoutForm({
           placeholder="Enter your name"
           type="text"
           disabled={isPending}
+          required
         />
         <FormField
           label="Your Address"
@@ -88,6 +111,7 @@ export default function CheckoutForm({
           placeholder="Enter your address"
           type="text"
           disabled={isPending}
+          required
         />
       </div>
 
@@ -99,6 +123,7 @@ export default function CheckoutForm({
           placeholder="Enter your email"
           type="email"
           disabled={isPending}
+          required
         />
         <FormField
           label="WhatsApp Number"
@@ -107,6 +132,7 @@ export default function CheckoutForm({
           placeholder="+2347012345678"
           type="text"
           disabled={isPending}
+          required
         />
       </div>
 
