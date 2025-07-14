@@ -32,7 +32,7 @@ export function ProductGrid({ products }: ProductGridProps) {
             key={p._id}
             className={cn(
               "group mx-auto w-full max-w-[150px] space-y-2 transition-opacity",
-              isOut && "cursor-not-allowed opacity-40",
+              isOut && "cursor-not-allowed opacity-60",
             )}
           >
             {/* Only wrap in <Link> if in stock */}

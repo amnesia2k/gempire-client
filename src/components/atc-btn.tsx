@@ -21,8 +21,7 @@ export default function AddToCart({
       disabled={isOutOfStock}
       className={cn(
         size === "sm" ? "mx-auto w-full text-xs" : "text-base",
-        isOutOfStock &&
-          "text-muted-foreground cursor-not-allowed text-base font-bold",
+        isOutOfStock && "cursor-not-allowed text-base font-bold",
       )}
     >
       {isOutOfStock ? "Out of Stock" : "Add to Cart"}

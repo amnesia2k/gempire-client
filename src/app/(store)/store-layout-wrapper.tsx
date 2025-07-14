@@ -35,7 +35,7 @@ export default function StoreLayoutWrapper({ children }: Props) {
   }
 
   return (
-    <div className="mx-auto flex min-h-[calc(70vh-200px)] max-w-7xl flex-col">
+    <div className="mx-auto flex h-screen max-w-7xl flex-col">
       <Navbar />
       <main className="flex-grow">{children}</main>
       <Separator className="my-5" />

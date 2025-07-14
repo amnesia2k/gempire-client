@@ -8,23 +8,22 @@ import {
   editProduct as editProductFn,
   deleteProduct as deleteProductFn,
 } from "../api/product";
+import { queryKeys } from "../query-keys";
 
-export const useProducts = () => {
-  return useQuery({
-    queryKey: ["products"],
+export const useProducts = () =>
+  useQuery({
+    queryKey: queryKeys.products,
     queryFn: getAllProducts,
-    staleTime: 600_000, // 10 minutes
+    staleTime: 600_000,
   });
-};
 
-export const useProductBySlug = (slug: string | undefined) => {
-  return useQuery({
-    queryKey: ["product", slug],
+export const useProductBySlug = (slug: string | undefined) =>
+  useQuery({
+    queryKey: slug ? queryKeys.product(slug) : [],
     queryFn: () => getProductBySlug(slug!),
     enabled: !!slug,
-    staleTime: 600_000, // 10 minutes
+    staleTime: 600_000,
   });
-};
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
@@ -32,8 +31,8 @@ export const useCreateProduct = () => {
     mutationFn: createProductFn,
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["products"] }),
-        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.products }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
       ]);
     },
   });
@@ -46,9 +45,9 @@ export const useEditProduct = () => {
       editProductFn(slug, formData),
     onSuccess: async (_, { slug }) => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["products"] }),
-        queryClient.invalidateQueries({ queryKey: ["product", slug] }),
-        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.products }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.product(slug) }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
       ]);
     },
   });
@@ -60,8 +59,8 @@ export const useDeleteProduct = () => {
     mutationFn: (id: string) => deleteProductFn(id),
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["products"] }),
-        queryClient.invalidateQueries({ queryKey: ["categories"] }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.products }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
       ]);
     },
   });
