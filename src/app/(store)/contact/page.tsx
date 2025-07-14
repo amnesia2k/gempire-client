@@ -46,7 +46,7 @@ export default function ContactPage() {
   };
 
   return (
-    <section className="mb-10 space-y-10 p-5">
+    <section className="space-y-10 p-5">
       <div className="text-center">
         <h1 className="mb-4 text-3xl font-bold md:text-4xl">Get in Touch</h1>
         <p className="mx-auto max-w-2xl text-base sm:text-xl">
@@ -57,11 +57,7 @@ export default function ContactPage() {
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         {/* 📬 Contact Form */}
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="bg-card h-fit space-y-6 rounded-lg border p-6 shadow-sm"
-        >
+        <form ref={formRef} onSubmit={handleSubmit} className="h-fit space-y-5">
           <h2 className="text-2xl font-semibold">Send us a Message</h2>
 
           <FormField

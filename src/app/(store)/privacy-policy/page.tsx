@@ -2,8 +2,8 @@ import React from "react";
 
 export default function PrivacyPolicyPage() {
   return (
-    <section className="mx-auto max-w-3xl space-y-6 px-4 py-10 sm:px-6 lg:px-0">
-      <h1 className="text-3xl font-bold">Privacy Policy</h1>
+    <section className="space-y-5 p-5 sm:px-7 md:space-y-10 lg:px-0">
+      <h1 className="text-center text-3xl font-bold">Privacy Policy</h1>
 
       <p>
         At Gempire, your privacy is a big deal. This policy outlines how we
@@ -53,7 +53,7 @@ export default function PrivacyPolicyPage() {
         <p>
           Questions? Email us at{" "}
           <a
-            href="mailto:support@gempire.com"
+            href="mailto:hello@gempire.shop"
             className="text-primary underline"
           >
             support@gempire.com

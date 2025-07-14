@@ -47,8 +47,8 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
           placeholder={placeholder}
           required={required}
           rows={rows}
-          disabled={disabled} // 👈 here
-          className="h-[150px] resize-none p-5"
+          disabled={disabled}
+          className="h-[150px] resize-none"
           defaultValue={props.defaultValue}
         />
       </div>
@@ -67,8 +67,8 @@ export const FormField: React.FC<FormFieldProps> = (props) => {
         placeholder={placeholder}
         required={required}
         type={type}
-        disabled={disabled} // 👈 here too
-        className="p-5"
+        disabled={disabled}
+        className=""
         defaultValue={props.defaultValue}
       />
     </div>

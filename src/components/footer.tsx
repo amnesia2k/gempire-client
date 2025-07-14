@@ -10,7 +10,7 @@ const macondo = Macondo({
 export default function Footer() {
   return (
     <footer className="px-4 pb-5 lg:px-8">
-      <div className="grid grid-cols-1 gap-8 pb-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 pb-3 md:grid-cols-4">
         {/* Column 1: About */}
         <div className="flex flex-col space-y-5 md:col-span-2">
           <Link href="/" className={`text-3xl font-bold ${macondo.className}`}>

@@ -2,8 +2,8 @@ import React from "react";
 
 export default function TermsOfServicePage() {
   return (
-    <section className="mx-auto max-w-3xl space-y-6 px-4 py-10 sm:px-6 lg:px-0">
-      <h1 className="text-3xl font-bold">Terms of Service</h1>
+    <section className="space-y-5 p-5 sm:px-7 md:space-y-10 lg:px-0">
+      <h1 className="text-center text-3xl font-bold">Terms of Service</h1>
 
       <p>
         Welcome to Gempire. By accessing our website or placing an order, you’re
@@ -57,7 +57,7 @@ export default function TermsOfServicePage() {
         <p>
           Contact{" "}
           <a
-            href="mailto:support@gempire.com"
+            href="mailto:hello@gempire.shop"
             className="text-primary underline"
           >
             support@gempire.com
