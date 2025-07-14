@@ -3,6 +3,8 @@ name: Client CI
 on:
   push:
     branches: [dev]
+  # pull_request:
+  #   branches: [main]
 
 jobs:
   build:
@@ -12,16 +14,20 @@ jobs:
       - name: 🛎 Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🧰 Setup Node.js + cache
+      - name: 🧰 Setup Node.js + Cache
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: "pnpm" # this enables automatic node_modules caching
 
       - name: 🧩 Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 10
+          version: 8 # or 10 if you're on latest
+          run_install: false # we will run install ourselves
+
+      - name: 🔍 Verify pnpm installation
+        run: pnpm -v
 
       - name: 📦 Install dependencies
         run: pnpm install
