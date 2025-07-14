@@ -46,7 +46,7 @@ export default function ContactPage() {
   };
 
   return (
-    <section className="mb-10 space-y-16 px-4">
+    <section className="mb-10 space-y-10 p-5">
       <div className="text-center">
         <h1 className="mb-4 text-3xl font-bold md:text-4xl">Get in Touch</h1>
         <p className="mx-auto max-w-2xl text-base sm:text-xl">

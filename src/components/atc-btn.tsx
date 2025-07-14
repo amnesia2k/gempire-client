@@ -5,16 +5,27 @@ import { cn } from "@/lib/utils";
 interface BtnProps {
   handleAddToCart: () => void;
   size?: "default" | "sm" | "lg";
+  isOutOfStock?: boolean;
 }
 
-export default function AddToCart({ handleAddToCart, size }: BtnProps) {
+export default function AddToCart({
+  handleAddToCart,
+  size = "default",
+  isOutOfStock,
+}: BtnProps) {
   return (
     <Button
       size={size}
+      variant={isOutOfStock ? "outline" : "default"}
       onClick={handleAddToCart}
-      className={cn(size === "sm" ? "mx-auto w-full text-xs" : "text-base")}
+      disabled={isOutOfStock}
+      className={cn(
+        size === "sm" ? "mx-auto w-full text-xs" : "text-base",
+        isOutOfStock &&
+          "text-muted-foreground cursor-not-allowed text-base font-bold",
+      )}
     >
-      Add to Cart
+      {isOutOfStock ? "Out of Stock" : "Add to Cart"}
     </Button>
   );
 }

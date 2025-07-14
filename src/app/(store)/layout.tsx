@@ -1,22 +1,9 @@
 import { generateMeta } from "@/lib/metadata";
 import { type Metadata } from "next";
 
-import { Inter, Poppins } from "next/font/google";
 import StoreLayoutWrapper from "./store-layout-wrapper";
 import { Suspense } from "react";
 import SplashLoader from "@/components/splash-loader";
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["500"],
-  variable: "--display-family",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--text-family",
-});
 
 export const metadata: Metadata = generateMeta({
   title: "Gempire",
@@ -37,7 +24,7 @@ export default function StoreLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <div className={`${inter.variable} ${poppins.variable}`}>
+      <div>
         <Suspense fallback={<SplashLoader />}>
           <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
         </Suspense>

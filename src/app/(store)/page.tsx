@@ -6,7 +6,9 @@ import { ArrowRight } from "lucide-react";
 export default function HomePage() {
   return (
     <section className="space-y-10 p-5">
-      <h1 className="text-center text-4xl">New Arrivals</h1>
+      <h1 className="text-center text-3xl font-bold md:text-4xl">
+        New Arrivals
+      </h1>
 
       <PageContent />
 

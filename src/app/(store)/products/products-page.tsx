@@ -6,6 +6,8 @@ import { CategoryFilter } from "@/components/category-filter";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
+import { Suspense } from "react";
+import { CategoryFilterSkeleton } from "@/components/category-filter-skeleton";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
@@ -33,13 +35,15 @@ export default function ProductsPage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <CategoryFilter />
+        <Suspense fallback={<CategoryFilterSkeleton />}>
+          <CategoryFilter />
+        </Suspense>
         <div className="space-x-2">
           <Button
             variant="outline"
             disabled={currentPage <= 1}
             onClick={() => handlePageChange(currentPage - 1)}
-            className="rounded-full"
+            className="border-primary rounded-full"
           >
             <ChevronLeft />
           </Button>
@@ -52,7 +56,7 @@ export default function ProductsPage() {
             variant="outline"
             disabled={currentPage >= totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
-            className="rounded-full"
+            className="border-primary rounded-full"
           >
             <ChevronRight />
           </Button>
