@@ -47,7 +47,7 @@ export default function CheckoutForm({
         cartItems.map((item) => ({
           productId: item.product._id,
           quantity: item.quantity,
-          unitPrice: item.product.price,
+          unitPrice: item.product.unit,
         })),
       ),
     );

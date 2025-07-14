@@ -1,30 +1,33 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getAllCategories,
   createCategory as createCategoryFn,
   getCategoryBySlug,
 } from "../api/category";
 import type { Category, CategoryWithProducts } from "../types";
+import { queryKeys } from "../query-keys";
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createCategoryFn,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["categories"] });
-      await queryClient.invalidateQueries({
-        queryKey: ["categories-with-all"],
-      });
-      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.categoriesWithAll,
+        }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.products }),
+      ]);
     },
   });
 };
 
 export const useCategories = () => {
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: queryKeys.categories,
     queryFn: getAllCategories,
     staleTime: 600_000,
   });
@@ -32,7 +35,7 @@ export const useCategories = () => {
 
 export const useCategoriesWithAll = () => {
   return useQuery({
-    queryKey: ["categories-with-all"],
+    queryKey: queryKeys.categoriesWithAll,
     queryFn: async (): Promise<Category[]> => {
       const categories = await getAllCategories();
       return [{ name: "All Products", slug: "all", _id: "all" }, ...categories];
@@ -47,7 +50,7 @@ export const useCategoryBySlug = (
   limit = 12,
 ) => {
   return useQuery<CategoryWithProducts>({
-    queryKey: ["category", slug, page, limit],
+    queryKey: slug ? queryKeys.category(slug, page, limit) : [],
     queryFn: () => getCategoryBySlug(slug!, page, limit),
     enabled: !!slug,
     staleTime: 600_000,

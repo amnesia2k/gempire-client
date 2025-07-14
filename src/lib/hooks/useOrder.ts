@@ -8,49 +8,41 @@ import {
   updateOrderStatus as updateOrderStatusFn,
 } from "../api/order";
 import type { OrderStatus } from "../types";
+import { queryKeys } from "../query-keys";
 
-// 📦 Fetch all orders
-export const useOrders = () => {
-  return useQuery({
-    queryKey: ["orders"],
+export const useOrders = () =>
+  useQuery({
+    queryKey: queryKeys.orders,
     queryFn: getAllOrders,
     staleTime: 600_000,
   });
-};
 
-// 🔍 Fetch order by ID (admin detail)
-export const useOrderById = (id: string | undefined) => {
-  return useQuery({
-    queryKey: ["order", id],
+export const useOrderById = (id: string | undefined) =>
+  useQuery({
+    queryKey: id ? queryKeys.order(id) : [],
     queryFn: () => getOrderById(id!),
     enabled: !!id,
     staleTime: 600_000,
   });
-};
 
-// 🧾 Create a new order
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: createOrderFn,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.orders });
     },
   });
 };
 
-// 🚚 Update order status
 export const useUpdateOrderStatus = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
       updateOrderStatusFn(id, status),
-
-    onSuccess: async (_message, { id }) => {
-      await queryClient.invalidateQueries({ queryKey: ["orders"] });
-      await queryClient.invalidateQueries({ queryKey: ["order", id] });
+    onSuccess: async (_msg, { id }) => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.orders });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.order(id) });
     },
   });
 };

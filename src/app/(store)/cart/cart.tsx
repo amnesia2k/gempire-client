@@ -19,9 +19,9 @@ export default function CartCheckoutPage() {
     "delivery",
   );
 
-  const DELIVERY_FEE = 2000;
-  const shipping = deliveryMethod === "delivery" ? DELIVERY_FEE : 0;
-  const total = cartTotal + shipping;
+  // const DELIVERY_FEE = 2000;
+  // const shipping = deliveryMethod === "delivery" ? DELIVERY_FEE : 0;
+  const total = cartTotal;
 
   if (itemCount === 0) {
     return (
@@ -56,12 +56,16 @@ export default function CartCheckoutPage() {
               <span>₦{cartTotal.toLocaleString("en-NG")}</span>
             </div>
             <div className="mb-4 flex justify-between">
-              <span>Delivery Fee</span>
+              {/* <span>Delivery Fee</span>
               <span>
                 {shipping === 0
                   ? "Free"
                   : `₦${shipping.toLocaleString("en-NG")}`}
-              </span>
+              </span> */}
+              <p className="text-muted-foreground text-sm italic">
+                Delivery cost will be arranged directly with our
+                courier/delivery handler.
+              </p>
             </div>
             <Separator className="my-4" />
             <div className="mb-6 flex justify-between text-lg font-bold">
