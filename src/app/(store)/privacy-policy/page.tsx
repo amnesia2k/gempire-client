@@ -53,10 +53,10 @@ export default function PrivacyPolicyPage() {
         <p>
           Questions? Email us at{" "}
           <a
-            href="mailto:hello@gempire.shop"
+            href="mailto:support@gempire.shop"
             className="text-primary underline"
           >
-            support@gempire.com
+            support@gempire.shop
           </a>
         </p>
       </div>

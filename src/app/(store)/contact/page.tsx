@@ -121,10 +121,10 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-lg font-semibold">Email Us</h3>
                 <a
-                  href="mailto:hello@gempire.shop"
+                  href="mailto:support@gempire.shop"
                   className="text-muted-foreground"
                 >
-                  hello@gempire.shop
+                  support@gempire.shop
                 </a>
               </div>
             </div>

@@ -1,19 +1,42 @@
-import Link from "next/link";
-import { Facebook, Instagram, Twitter } from "lucide-react";
-import { Macondo } from "next/font/google";
+"use client";
 
-const macondo = Macondo({
-  weight: "400",
-  subsets: ["latin"],
-});
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+// ✅ React Icons
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+
+const exploreLinks = [
+  { label: "Home", href: "/" },
+  { label: "All Products", href: "/products" },
+  { label: "Contact", href: "/contact" },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Service", href: "/tos" },
+];
+
+// ✨ React Icons-based socials
+const socialLinks = [
+  { label: "Facebook", href: "#", icon: FaFacebookF, color: "#1877F2" },
+  { label: "Instagram", href: "#", icon: FaInstagram, color: "#E4405F" },
+  { label: "X", href: "#", icon: FaXTwitter, color: "#000000" },
+  { label: "WhatsApp", href: "#", icon: FaWhatsapp, color: "#25D366" },
+  { label: "TikTok", href: "#", icon: FaTiktok, color: "#010101" },
+];
 
 export default function Footer() {
+  const pathname = usePathname();
+
   return (
-    <footer className="px-4 pb-5 lg:px-8">
-      <div className="grid grid-cols-1 gap-5 pb-3 md:grid-cols-4">
+    <footer className="px-4 py-5 lg:px-8">
+      <div className="grid grid-cols-1 gap-5 pb-5 md:grid-cols-4">
         {/* Column 1: About */}
-        <div className="flex flex-col space-y-5 md:col-span-2">
-          <Link href="/" className={`text-3xl font-bold ${macondo.className}`}>
+        <div className="flex flex-col space-y-4 md:col-span-2">
+          <Link href="/" className="text-3xl font-bold">
             Gempire
           </Link>
           <p className="max-w-md">
@@ -23,62 +46,54 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Column 2: Quick Links */}
-        <div className="space-y-2">
-          <h4 className="text-lg font-bold">Explore</h4>
+        {/* Column 2: Explore */}
+        <div>
+          <h4 className="mb-4 font-semibold">Explore</h4>
           <ul className="space-y-2">
-            <li>
-              <Link
-                href="/"
-                className="hover:text-primary transition-colors hover:underline"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/products"
-                className="hover:text-primary transition-colors hover:underline"
-              >
-                All Products
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/contact"
-                className="hover:text-primary transition-colors hover:underline"
-              >
-                Contact
-              </Link>
-            </li>
+            {exploreLinks.map(({ label, href }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={cn(
+                    "transition-colors hover:underline",
+                    pathname === href ? "text-primary" : "hover:text-primary",
+                  )}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Column 3: Social */}
-        <div className="space-y-2">
-          <h4 className="text-lg font-bold">Follow Us</h4>
-          <div className="flex space-x-4">
-            <Link
-              href="#"
-              aria-label="Facebook"
-              className="hover:text-primary transition-colors"
-            >
-              <Facebook className="h-6 w-6" />
-            </Link>
-            <Link
-              href="#"
-              aria-label="Instagram"
-              className="hover:text-primary transition-colors"
-            >
-              <Instagram className="h-6 w-6" />
-            </Link>
-            <Link
-              href="#"
-              aria-label="Twitter"
-              className="hover:text-primary transition-colors"
-            >
-              <Twitter className="h-6 w-6" />
-            </Link>
+        <div>
+          <h4 className="mb-4 font-semibold">Follow Us</h4>
+          <div className="flex flex-wrap gap-4">
+            {socialLinks.map(({ label, href, icon: Icon, color }) => (
+              <Link
+                key={label}
+                href={href}
+                aria-label={label}
+                className="transition-transform duration-200 hover:scale-110"
+              >
+                <Icon
+                  className="h-6 w-6 transition-colors duration-300"
+                  style={{
+                    color: "var(--foreground)",
+                  }}
+                  onMouseEnter={(e) => {
+                    // 🧠 Skip hover color if it's black (so it stays visible)
+                    if (color !== "#000000" && color !== "#010101") {
+                      e.currentTarget.style.color = color;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "var(--foreground)";
+                  }}
+                />
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -86,15 +101,18 @@ export default function Footer() {
       <div className="border-border flex flex-col items-center justify-between border-t pt-5 text-sm md:flex-row">
         <p>&copy; {new Date().getFullYear()} Gempire. All rights reserved.</p>
         <div className="mt-4 flex space-x-4 md:mt-0">
-          <Link
-            href="/privacy-policy"
-            className="hover:text-primary transition-colors"
-          >
-            Privacy Policy
-          </Link>
-          <Link href="/tos" className="hover:text-primary transition-colors">
-            Terms of Service
-          </Link>
+          {legalLinks.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "transition-colors",
+                pathname === href ? "text-primary" : "hover:text-primary",
+              )}
+            >
+              {label}
+            </Link>
+          ))}
         </div>
       </div>
     </footer>
