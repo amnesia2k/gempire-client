@@ -114,8 +114,8 @@ export default function Success() {
             autoplay
             style={{ width: 400, height: 400 }}
           />
-          <h1 className="font-headline mb-4 text-3xl font-bold md:text-4xl">
-            Payment Verified ✅
+          <h1 className="mb-4 text-3xl font-bold md:text-4xl">
+            Payment Verified
           </h1>
           <p className="text-muted-foreground mb-2 text-lg">
             Order ID: <span className="font-semibold">#{orderId}</span>
@@ -129,7 +129,7 @@ export default function Success() {
       ) : (
         <div className="flex h-screen flex-col items-center justify-center">
           <h1 className="text-2xl font-semibold text-red-600">
-            Payment Failed 💔
+            Payment Failed
           </h1>
           <p className="text-muted-foreground mt-2">Please try again.</p>
         </div>

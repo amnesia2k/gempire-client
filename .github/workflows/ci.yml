@@ -2,7 +2,7 @@ name: Client CI
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, paystack-test]
   # pull_request:
   #   branches: [main]
 

@@ -72,7 +72,7 @@ export default function CheckoutForm({
       const paymentRes = await initPayment({
         email,
         amount: amount * 100, // Paystack wants kobo, so multiply by 100
-        subaccount: "ACCT_40m22ih8x2mb2b0", // or fetch dynamically
+        subaccount: "ACCT_i3dzr4mhkxizgo4", // or fetch dynamically
         orderId,
         metadata: {
           name,
