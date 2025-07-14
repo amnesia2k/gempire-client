@@ -3,6 +3,8 @@ import { type Metadata } from "next";
 
 import { Inter, Poppins } from "next/font/google";
 import StoreLayoutWrapper from "./store-layout-wrapper";
+import { Suspense } from "react";
+import SplashLoader from "@/components/splash-loader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +38,9 @@ export default function StoreLayout({
   return (
     <>
       <div className={`${inter.variable} ${poppins.variable}`}>
-        <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
+        <Suspense fallback={<SplashLoader />}>
+          <StoreLayoutWrapper>{children}</StoreLayoutWrapper>
+        </Suspense>
       </div>
     </>
   );
