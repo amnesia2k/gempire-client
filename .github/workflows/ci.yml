@@ -3,6 +3,8 @@ name: Client CI
 on:
   push:
     branches: [dev]
+  # pull_request:
+  #   branches: [main]
 
 jobs:
   build:
@@ -12,27 +14,22 @@ jobs:
       - name: 🛎 Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🧰 Setup Node.js
+      - name: 🧰 Setup Node.js with pnpm cache
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: "pnpm" # enables automatic node_modules caching for pnpm
 
       - name: 🧩 Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8 # or 10 if you want latest
-          run_install: false
-
-      # 🧠 Add pnpm to PATH manually if run_install is false
-      - name: 🔧 Add pnpm to PATH manually
-        run: echo "$(npm bin -g)" >> $GITHUB_PATH
+          version: 8 # or 10 if you're feeling spicy
+          cache: true # enables .pnpm-store caching
 
       - name: 🔍 Verify pnpm installation
         run: pnpm -v
 
-      - name: 📦 Install dependencies
-        run: pnpm install
+      # Since pnpm/action-setup ran install already, we skip manually running pnpm install
 
       - name: 🧹 Lint
         run: pnpm lint
