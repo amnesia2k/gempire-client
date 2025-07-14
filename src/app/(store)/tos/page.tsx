@@ -57,7 +57,7 @@ export default function TermsOfServicePage() {
         <p>
           Contact{" "}
           <a
-            href="mailto:support@gempire.com"
+            href="mailto:hello@gempire.shop"
             className="text-primary underline"
           >
             support@gempire.com
