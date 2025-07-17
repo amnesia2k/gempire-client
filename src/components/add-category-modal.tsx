@@ -38,6 +38,7 @@ export const AddCategoryModal = ({
       .then((s) => toast.success(s.message))
       .finally(() => {
         setIsPending(false);
+        setOpen(false);
       });
 
     toast.promise(createPromise, {

@@ -44,3 +44,8 @@ yarn-error.log*
 
 # idea files
 .idea
+
+# Docker
+.dockerignore
+Dockerfile
+README.Docker.md
