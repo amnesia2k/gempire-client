@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import PageContent from "./page-content";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import PromoBanner from "@/components/promo-banner";
 
 export default function HomePage() {
   return (
@@ -9,6 +10,8 @@ export default function HomePage() {
       <h1 className="text-center text-3xl font-bold md:text-4xl">
         New Arrivals
       </h1>
+
+      <PromoBanner />
 
       <PageContent />
 

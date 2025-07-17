@@ -7,6 +7,12 @@ import { cn } from "@/lib/utils";
 // ✅ React Icons
 import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { Macondo } from "next/font/google";
+
+const macondo = Macondo({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const exploreLinks = [
   { label: "Home", href: "/" },
@@ -36,7 +42,7 @@ export default function Footer() {
       <div className="grid grid-cols-1 gap-5 pb-5 md:grid-cols-4">
         {/* Column 1: About */}
         <div className="flex flex-col space-y-4 md:col-span-2">
-          <Link href="/" className="text-3xl font-bold">
+          <Link href="/" className={`text-3xl font-bold ${macondo.className}`}>
             Gempire
           </Link>
           <p className="max-w-md">

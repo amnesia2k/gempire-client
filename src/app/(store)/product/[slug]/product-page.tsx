@@ -73,7 +73,7 @@ export default function ProductPage() {
             ₦{Number(product.price).toLocaleString("en-NG")}
           </p>
 
-          <div className="prose text-foreground/80 max-w-none">
+          <div className="prose text-foreground/80 max-w-none whitespace-pre-line">
             <p>{product.description}</p>
           </div>
 
