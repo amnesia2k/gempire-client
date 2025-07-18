@@ -162,7 +162,7 @@ export default function PromoDetailsModal({ isOpen, onClose, promo }: Props) {
           {!isEditing ? (
             <Button onClick={toggleEdit}>Edit</Button>
           ) : (
-            <>
+            <div className="flex items-center gap-x-3">
               <Button
                 variant="outline"
                 onClick={toggleEdit}
@@ -173,7 +173,7 @@ export default function PromoDetailsModal({ isOpen, onClose, promo }: Props) {
               <Button onClick={handleSave} disabled={isPending}>
                 {isPending ? "Saving..." : "Save"}
               </Button>
-            </>
+            </div>
           )}
         </div>
       </DialogContent>

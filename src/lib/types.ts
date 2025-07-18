@@ -85,6 +85,7 @@ export type Product = {
 };
 
 export type GetAllProductsResponse = {
+  filter(arg0: (p: Product) => boolean): Product[];
   success: boolean;
   message: string;
   data: Product[];

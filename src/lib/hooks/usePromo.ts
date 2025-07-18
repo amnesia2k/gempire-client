@@ -31,8 +31,6 @@ export const usePromoCodeById = (id: string | undefined) =>
 
 // NEW HOOK: Use mutation for applying promo code by its string code
 export const useApplyPromoCode = () => {
-  // No queryClient.invalidateQueries needed here, as it's not fetching shared cached data.
-  // It's just a lookup for immediate use.
   return useMutation<GetPromoCodeResponse, Error, string>({
     mutationFn: getPromoCodeByCodeFn, // The actual API call to fetch by code
   });
