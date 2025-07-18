@@ -8,6 +8,7 @@ import { ProductQuantity } from "@/components/product-quantity";
 import { Badge } from "@/components/ui/badge";
 import Script from "next/script";
 import SplashLoader from "@/components/splash-loader";
+import { SimilarProducts } from "@/components/similar-products";
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -82,6 +83,11 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+
+      <SimilarProducts
+        categorySlug={product.category?.slug ?? ""}
+        excludeProductId={product._id}
+      />
     </div>
   );
 }
