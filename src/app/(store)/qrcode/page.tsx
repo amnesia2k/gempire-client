@@ -35,12 +35,6 @@ interface ContactInfo {
   url: string;
 }
 
-// interface TabOption {
-//   id: string;
-//   label: string;
-//   icon: React.ElementType;
-// }
-
 const QRCodeGenerator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"url" | "text" | "contact">("url");
   const [qrData, setQrData] = useState("");
@@ -87,72 +81,85 @@ const QRCodeGenerator: React.FC = () => {
     return lines.filter(Boolean).join("\n");
   };
 
-  const createQR = (text: string) => {
-    const container = qrContainerRef.current;
-    if (!container) return;
+  // 1. Define generateFallbackQR FIRST
+  const generateFallbackQR = useCallback(
+    (text: string) => {
+      const container = qrContainerRef.current;
+      if (!container) return;
 
-    container.innerHTML = "";
+      container.innerHTML = ""; // Clear previous QR code
 
-    const canvas = document.createElement("canvas");
-    container.appendChild(canvas);
+      const encoded = encodeURIComponent(text);
+      const img = document.createElement("img");
+      img.src = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encoded}&choe=UTF-8`;
+      img.alt = "QR Code";
+      img.className = "w-full h-auto rounded-xl shadow-lg bg-white p-4";
+      img.style.maxWidth = "300px";
 
-    try {
-      if (typeof window.QRious === "function") {
-        new window.QRious({
-          element: canvas,
-          value: text,
-          size: 300,
-          background: "white",
-          foreground: "black",
-          level: "M",
-        });
+      img.onerror = () => {
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}&format=png&margin=10`;
+      };
+
+      container.appendChild(img);
+    },
+    [qrContainerRef], // Dependency: qrContainerRef to ensure it has the latest ref
+  );
+
+  // 2. Then define createQR, which can now safely call generateFallbackQR
+  const createQR = useCallback(
+    (text: string) => {
+      const container = qrContainerRef.current;
+      if (!container) return;
+
+      container.innerHTML = ""; // Clear previous QR code
+
+      const canvas = document.createElement("canvas");
+      container.appendChild(canvas);
+
+      try {
+        if (typeof window.QRious === "function") {
+          new window.QRious({
+            element: canvas,
+            value: text,
+            size: 300,
+            background: "white",
+            foreground: "black",
+            level: "M",
+          });
+        }
+
+        canvas.className = "w-full h-auto rounded-xl shadow-lg bg-white";
+        canvas.style.maxWidth = "300px";
+      } catch (err) {
+        console.error("Error creating QR code with QRious:", err);
+        generateFallbackQR(text); // Safe to call now
+      }
+    },
+    [qrContainerRef, generateFallbackQR], // Added generateFallbackQR as a dependency here
+  );
+
+  // 3. Finally, define generateQRCode
+  const generateQRCode = useCallback(
+    async (text: string) => {
+      if (!text.trim()) {
+        qrContainerRef.current?.replaceChildren();
+        return;
       }
 
-      canvas.className = "w-full h-auto rounded-xl shadow-lg bg-white";
-      canvas.style.maxWidth = "300px";
-    } catch (err) {
-      console.error("Error creating QR code with QRious:", err);
-      generateFallbackQR(text);
-    }
-  };
-
-  const generateFallbackQR = (text: string) => {
-    const container = qrContainerRef.current;
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const encoded = encodeURIComponent(text);
-    const img = document.createElement("img");
-    img.src = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encoded}&choe=UTF-8`;
-    img.alt = "QR Code";
-    img.className = "w-full h-auto rounded-xl shadow-lg bg-white p-4";
-    img.style.maxWidth = "300px";
-
-    img.onerror = () => {
-      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}&format=png&margin=10`;
-    };
-
-    container.appendChild(img);
-  };
-
-  const generateQRCode = useCallback(async (text: string) => {
-    if (!text.trim()) {
-      qrContainerRef.current?.replaceChildren();
-      return;
-    }
-
-    if (!window.QRious) {
-      const script = document.createElement("script");
-      script.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js";
-      script.onload = () => createQR(text);
-      script.onerror = () => generateFallbackQR(text);
-      document.head.appendChild(script);
-    } else {
-      createQR(text);
-    }
-  }, []);
+      // Dynamically load QRious if not already loaded
+      if (!window.QRious) {
+        const script = document.createElement("script");
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js";
+        script.onload = () => createQR(text);
+        script.onerror = () => generateFallbackQR(text);
+        document.head.appendChild(script);
+      } else {
+        createQR(text);
+      }
+    },
+    [createQR, generateFallbackQR, qrContainerRef], // Dependencies: include memoized functions and the ref
+  );
 
   useEffect(() => {
     let data = "";
@@ -177,7 +184,8 @@ const QRCodeGenerator: React.FC = () => {
     }
 
     setQrData(data);
-    void generateQRCode(data); // <-- 👈 this solves the no-floating-promises
+    // Suppress the ESLint warning for floating promises, as it's intentionally not awaited
+    void generateQRCode(data);
   }, [activeTab, urlInput, textInput, contactInfo, generateQRCode]);
 
   const downloadQRCode = () => {
@@ -194,11 +202,15 @@ const QRCodeGenerator: React.FC = () => {
     link.download = `qr-code-${activeTab}.png`;
 
     if (canvas) {
+      // For canvas, use toDataURL
       link.href = canvas.toDataURL("image/png");
       link.click();
     } else if (img?.src) {
+      // For fallback img, use its src (which is already a data URL or public URL)
       link.href = img.src;
       link.click();
+    } else {
+      console.warn("No QR code element (canvas or image) found to download.");
     }
   };
 
@@ -223,8 +235,8 @@ const QRCodeGenerator: React.FC = () => {
       organization: "",
       url: "",
     });
-    setQrData("");
-    qrContainerRef.current?.replaceChildren();
+    setQrData(""); // Clear the displayed QR data
+    qrContainerRef.current?.replaceChildren(); // Clear the actual QR code display
   };
 
   type TabType = "url" | "text" | "contact";

@@ -14,4 +14,8 @@ export const queryKeys = {
 
   products: ["products"],
   product: (slug: string) => ["product", slug],
+
+  // ✅ Added these
+  promoCodes: ["promoCodes"],
+  promoCode: (id: string) => ["promoCode", id],
 };
