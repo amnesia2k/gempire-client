@@ -125,10 +125,16 @@ export type Order = {
   address: string;
   telephone: string;
   email: string;
-  note?: string;
+  note?: string | null;
   status: OrderStatus;
   deliveryMethod: OrderDeliveryMethod;
   createdAt: string;
+
+  // 🧾 Promo-related fields
+  promoCodeId: string | null;
+  discountAmount: string;
+  promoCode?: PromoCode | null;
+
   items: OrderItem[];
 };
 
@@ -147,6 +153,44 @@ export type GetOrderResponse = {
 export type UpdateOrderStatusResponse = {
   success: boolean;
   message: string;
+};
+
+export type PromoCode = {
+  _id: string;
+  name: string;
+  code: string;
+  discount: string; // 🧠 string because stored as numeric in DB
+  isPercentage: boolean;
+  isActive: boolean;
+  description: string;
+  ctaText: string;
+  subtitle: string;
+  urgent: boolean;
+  createdAt: string;
+};
+
+export type GetPromoCodeResponse = {
+  success: boolean;
+  message: string;
+  data: PromoCode;
+};
+
+export type GetAllPromoCodesResponse = {
+  success: boolean;
+  message: string;
+  data: PromoCode[];
+};
+
+export type CreatePromoCodeResponse = {
+  success: boolean;
+  message: string;
+  data: PromoCode;
+};
+
+export type UpdatePromoCodeResponse = {
+  success: boolean;
+  message: string;
+  data: PromoCode;
 };
 
 export type DashboardMetrics = {

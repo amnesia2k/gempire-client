@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Package, LayoutDashboard, ShoppingBag } from "lucide-react";
+import { Package, LayoutDashboard, ShoppingBag, Percent } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -33,6 +33,11 @@ const menuItems = [
     title: "Orders",
     href: "/admin-order",
     icon: ShoppingBag,
+  },
+  {
+    title: "Promo Codes",
+    href: "/admin-promo",
+    icon: Percent,
   },
 ];
 

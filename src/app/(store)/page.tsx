@@ -6,12 +6,12 @@ import PromoBanner from "@/components/promo-banner";
 
 export default function HomePage() {
   return (
-    <section className="space-y-10 p-5">
+    <section className="space-y-5 p-5">
+      <PromoBanner />
+
       <h1 className="text-center text-3xl font-bold md:text-4xl">
         New Arrivals
       </h1>
-
-      <PromoBanner />
 
       <PageContent />
 
