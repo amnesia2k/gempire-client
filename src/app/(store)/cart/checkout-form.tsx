@@ -15,13 +15,15 @@ import { useRouter } from "next/navigation";
 type Props = {
   deliveryMethod: "delivery" | "pickup";
   setDeliveryMethod: (val: "delivery" | "pickup") => void;
+  promoCodeId: string | null; // <-- New prop for promo code ID
 };
 
 export default function CheckoutForm({
   deliveryMethod,
   setDeliveryMethod,
+  promoCodeId, // <-- Destructure new prop
 }: Props) {
-  const { cartItems, clearCart } = useCartStore();
+  const { cartItems, clearCart, removePromoCode } = useCartStore(); // Also clear promo code on success
   const { mutateAsync } = useCreateOrder();
   const router = useRouter();
 
@@ -52,11 +54,17 @@ export default function CheckoutForm({
       ),
     );
 
+    if (promoCodeId) {
+      // Append promo code ID if available
+      formData.append("promoCodeId", promoCodeId);
+    }
+
     const orderPromise = mutateAsync(formData)
       .then((res) => {
         router.push(`/success?order-id=${res.data.orderId}`);
         toast.success(res.message);
         clearCart();
+        removePromoCode(); // Remove promo code from store after successful order
         form.reset();
       })
       .catch((err) => {

@@ -18,4 +18,5 @@ export const queryKeys = {
   // ✅ Added these
   promoCodes: ["promoCodes"],
   promoCode: (id: string) => ["promoCode", id],
+  promoCodeByCode: (code: string) => ["promoCode", "code", code],
 };
