@@ -6,11 +6,13 @@ import {
   getPromoCodeById,
   createPromoCode as createPromoCodeFn,
   updatePromoCode as updatePromoCodeFn,
+  getPromoCodeByCode as getPromoCodeByCodeFn,
 } from "../api/promo";
 import { queryKeys } from "../query-keys";
 import type { PromoCode } from "../types";
+import type { GetPromoCodeResponse } from "../types"; // Import the response type for mutation
 
-// 🧾 Get all promo codes
+// Get all promo codes
 export const usePromoCodes = () =>
   useQuery({
     queryKey: queryKeys.promoCodes,
@@ -18,7 +20,7 @@ export const usePromoCodes = () =>
     staleTime: 600_000,
   });
 
-// 🔍 Get single promo by ID
+// Get single promo by ID
 export const usePromoCodeById = (id: string | undefined) =>
   useQuery({
     queryKey: id ? queryKeys.promoCode(id) : [],
@@ -27,7 +29,16 @@ export const usePromoCodeById = (id: string | undefined) =>
     staleTime: 600_000,
   });
 
-// ➕ Create promo code
+// NEW HOOK: Use mutation for applying promo code by its string code
+export const useApplyPromoCode = () => {
+  // No queryClient.invalidateQueries needed here, as it's not fetching shared cached data.
+  // It's just a lookup for immediate use.
+  return useMutation<GetPromoCodeResponse, Error, string>({
+    mutationFn: getPromoCodeByCodeFn, // The actual API call to fetch by code
+  });
+};
+
+// Create promo code
 export const useCreatePromoCode = () => {
   const queryClient = useQueryClient();
 
@@ -39,7 +50,7 @@ export const useCreatePromoCode = () => {
   });
 };
 
-// ✏️ Update promo code
+// Update promo code
 export const useUpdatePromoCode = () => {
   const queryClient = useQueryClient();
 

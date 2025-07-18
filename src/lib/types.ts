@@ -130,7 +130,6 @@ export type Order = {
   deliveryMethod: OrderDeliveryMethod;
   createdAt: string;
 
-  // 🧾 Promo-related fields
   promoCodeId: string | null;
   discountAmount: string;
   promoCode?: PromoCode | null;
@@ -159,7 +158,7 @@ export type PromoCode = {
   _id: string;
   name: string;
   code: string;
-  discount: string; // 🧠 string because stored as numeric in DB
+  discount: string;
   isPercentage: boolean;
   isActive: boolean;
   description: string;
@@ -173,6 +172,7 @@ export type GetPromoCodeResponse = {
   success: boolean;
   message: string;
   data: PromoCode;
+  promoCode?: PromoCode; // Add promoCode to the type for consistency with controller response
 };
 
 export type GetAllPromoCodesResponse = {

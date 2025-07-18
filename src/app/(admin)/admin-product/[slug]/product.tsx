@@ -98,7 +98,7 @@ export default function Product() {
   };
 
   const handleShare = () => {
-    const rawMessage = `Check out this product on our store:\n${data?.name} - ${productLink}\nPrice: *₦${Number(data?.price).toLocaleString()}*`;
+    const rawMessage = `Check out this product on our store:\n\n${data?.name} - ${productLink}\n\nPrice: *₦${Number(data?.price).toLocaleString()}*`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(rawMessage)}`;
     window.open(whatsappUrl, "_blank");
   };

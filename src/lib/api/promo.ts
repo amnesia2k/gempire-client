@@ -7,7 +7,7 @@ import type {
   UpdatePromoCodeResponse,
 } from "../types";
 
-// ➕ Create promo code
+// Create promo code
 export const createPromoCode = async (
   data: Partial<PromoCode>,
 ): Promise<CreatePromoCodeResponse> => {
@@ -20,7 +20,7 @@ export const createPromoCode = async (
   throw new Error(res.data?.message || "Failed to create promo code");
 };
 
-// 📦 Get all promo codes (admin)
+// Get all promo codes (admin)
 export const getAllPromoCodes = async (): Promise<GetAllPromoCodesResponse> => {
   const res = await api.get<GetAllPromoCodesResponse>("/code");
   console.log("API Response:", res.data);
@@ -32,7 +32,7 @@ export const getAllPromoCodes = async (): Promise<GetAllPromoCodesResponse> => {
   throw new Error(res.data?.message || "Failed to fetch promo codes");
 };
 
-// 🔍 Get single promo code
+// Get single promo code by ID
 export const getPromoCodeById = async (
   id: string,
 ): Promise<GetPromoCodeResponse> => {
@@ -45,7 +45,20 @@ export const getPromoCodeById = async (
   throw new Error(res.data?.message || "Failed to fetch promo code");
 };
 
-// ✏️ Update promo code (PATCH)
+// New: Get promo code by its code string
+export const getPromoCodeByCode = async (
+  code: string,
+): Promise<GetPromoCodeResponse> => {
+  const res = await api.get<GetPromoCodeResponse>(`/code/string/${code}`);
+
+  if (res.data?.success) {
+    return res.data;
+  }
+
+  throw new Error(res.data?.message || "Failed to fetch promo code by code");
+};
+
+// Update promo code (PATCH)
 export const updatePromoCode = async (
   id: string,
   updates: Partial<PromoCode>,

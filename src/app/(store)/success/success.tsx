@@ -16,7 +16,7 @@ export default function Success() {
   const whatsappLink = `https://wa.me/2348133769036?text=${whatsappText}`;
 
   return (
-    <div className="flex flex-col items-center justify-center px-4 text-center">
+    <div className="mt-20 mb-40 flex flex-col items-center justify-center px-4 text-center">
       {/* <CheckCircle className="mb-6 h-20 w-20 text-green-500" /> */}
       {/* <iframe src="https://lottie.host/embed/52f194f3-ae3f-43eb-8ccd-d779eb4402ba/38O3sIqZ07.lottie"></iframe> */}
       <Lottie

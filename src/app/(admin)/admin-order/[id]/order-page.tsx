@@ -38,23 +38,37 @@ export default function OneOrderPage() {
 
   const order = data.data;
 
-  const total = order.items.reduce((sum, item) => {
+  // Calculate Subtotal (total before discount)
+  const subtotal = order.items.reduce((sum, item) => {
     return sum + Number(item.unitPrice) * item.quantity;
   }, 0);
+
+  // Parse discount amount (ensure it's a number, default to 0)
+  const discountAmount = Number(order.discountAmount) || 0;
+
+  // Calculate Final Total after discount
+  const finalTotal = subtotal - discountAmount;
+
+  // Check if a discount was actually applied
+  const hasDiscount = discountAmount > 0;
 
   const handleStatusChange = (newStatus: string) => {
     if (!orderId) return;
 
-    const createPromise = mutateAsync({
+    // Set pending state when mutation starts
+    setIsPending(true);
+
+    const updatePromise = mutateAsync({
       id: orderId,
       status: newStatus as OrderStatus,
     })
       .then((r) => toast.success(r.message))
-      .finally(() => setIsPending(false));
+      .catch((err) => toast.error(extractApiError(err))) // Display specific API error
+      .finally(() => setIsPending(false)); // Reset pending state regardless of outcome
 
-    toast.promise(createPromise, {
+    toast.promise(updatePromise, {
       loading: "Updating order status...",
-      error: (err) => extractApiError(err),
+      error: "Failed to update order status.", // Fallback message for promise error
     });
   };
 
@@ -67,6 +81,9 @@ export default function OneOrderPage() {
         <div className="space-y-4 md:col-span-2">
           {order.items.map((item) => {
             const product = item.product;
+            // Ensure product exists before trying to access its properties
+            if (!product) return null; // Or render a placeholder/error for missing product
+
             const image = product.images?.[0]?.imageUrl;
 
             return (
@@ -100,12 +117,50 @@ export default function OneOrderPage() {
 
         {/* Right: Summary + Shipping + Status */}
         <div className="space-y-6">
-          {/* Order Summary */}
+          {/* Order Summary with Discount */}
           <div className="rounded-lg border p-6">
             <h2 className="mb-4 text-2xl font-semibold">Order Summary</h2>
-            <div className="flex justify-between text-lg font-bold">
-              <span>Total:</span>
-              <span>₦{total.toLocaleString()}</span>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span>Subtotal:</span>
+                <span>₦{subtotal.toLocaleString()}</span>
+              </div>
+
+              {hasDiscount && (
+                <>
+                  <div className="flex justify-between text-green-600">
+                    <span>Discount:</span>
+                    <span>-₦{discountAmount.toLocaleString()}</span>
+                  </div>
+                  {order.promoCode && (
+                    <div className="text-muted-foreground text-right text-sm">
+                      <span>
+                        Applied Code:{" "}
+                        <span className="font-semibold text-green-700">
+                          {order.promoCode.code}
+                        </span>{" "}
+                        (
+                        {order.promoCode.isPercentage
+                          ? `${Number(order.promoCode.discount).toFixed(0)}%`
+                          : `₦${Number(order.promoCode.discount).toLocaleString()}`}{" "}
+                        off)
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+
+              <div className="mt-4 flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span className="flex flex-col items-end">
+                  {hasDiscount && (
+                    <span className="text-muted-foreground text-sm line-through">
+                      ₦{subtotal.toLocaleString()}
+                    </span>
+                  )}
+                  <span>₦{finalTotal.toLocaleString()}</span>
+                </span>
+              </div>
             </div>
           </div>
 
@@ -153,7 +208,7 @@ export default function OneOrderPage() {
             <Select
               onValueChange={handleStatusChange}
               defaultValue={order.status}
-              disabled={isPending}
+              disabled={isPending} // Disable dropdown while update is in progress
             >
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder="Select status" />
