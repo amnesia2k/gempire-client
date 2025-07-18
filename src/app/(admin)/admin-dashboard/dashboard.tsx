@@ -146,7 +146,7 @@ export default function AdminDashboard() {
         </Select>
       </div>
 
-      <div className="bg-card text-card-foreground rounded-lg border p-2 shadow-sm">
+      <div className="bg-card text-card-foreground rounded-lg border px-2 py-7 shadow-sm">
         {loadingChart ? (
           <div className="flex h-64 items-center justify-center">
             <SplashLoader />

@@ -16,7 +16,7 @@ export default function AdminPromoWrapper() {
   return (
     <section>
       <div className="flex items-center justify-between">
-        <DashHeader text="All Promotion Codes" />
+        <DashHeader text="All Promo Codes" />
 
         <Button
           onClick={openCreateModal}
