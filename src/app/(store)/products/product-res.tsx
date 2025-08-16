@@ -21,7 +21,7 @@ export function ProductResults() {
 
   if (products.length === 0) {
     return (
-      <div className="text-muted-foreground text-center">
+      <div className="text-muted-foreground flex min-h-screen items-center text-center">
         No products found in this category
       </div>
     );
