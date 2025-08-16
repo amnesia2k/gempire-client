@@ -135,7 +135,7 @@ export default function Navbar() {
             >
               {/* Top row: close */}
               <div className="mb-8 flex items-center justify-between">
-                <CartIcon variant="outline" />
+                <CartIcon variant="outline" onClick={closeMobileSidebar} />
 
                 {/* <div className="flex justify-end"> */}
                 <button onClick={closeMobileSidebar} className="cursor-pointer">
