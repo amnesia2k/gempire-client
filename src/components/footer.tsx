@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 // ✅ React Icons
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaTiktok } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { SiGmail, SiInstagram, SiTiktok, SiWhatsapp } from "react-icons/si";
 import { Macondo } from "next/font/google";
 
 const macondo = Macondo({
@@ -27,11 +26,35 @@ const legalLinks = [
 
 // ✨ React Icons-based socials
 const socialLinks = [
-  { label: "Facebook", href: "#", icon: FaFacebookF, color: "#1877F2" },
-  { label: "Instagram", href: "#", icon: FaInstagram, color: "#E4405F" },
-  { label: "X", href: "#", icon: FaXTwitter, color: "#000000" },
-  { label: "WhatsApp", href: "#", icon: FaWhatsapp, color: "#25D366" },
-  { label: "TikTok", href: "#", icon: FaTiktok, color: "#010101" },
+  // { label: "Facebook", icon: FaFacebookF, color: "#1877F2" },
+  {
+    label: "Instagram",
+    icon: SiInstagram,
+    color: "#E4405F",
+    link: "https://www.instagram.com/_gempire?igsh=d252dGtwNGQ2YjYx&utm_source=qr",
+  },
+
+  // { label: "X", icon: FaXTwitter, color: "#000000" },
+  {
+    label: "WhatsApp",
+    icon: SiWhatsapp,
+    color: "#25D366",
+    link: "https://wa.me/2348133769036",
+  },
+
+  {
+    label: "TikTok",
+    icon: SiTiktok,
+    color: "#010101",
+    link: "https://www.tiktok.com/@ovieeee3?_t=ZM-8y8Z6xXDvBl&_r=1",
+  },
+
+  {
+    label: "Email",
+    icon: SiGmail,
+    color: "#FF0000",
+    link: "mailto:graceovie06@gmail.com",
+  },
 ];
 
 export default function Footer() {
@@ -76,10 +99,10 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 font-semibold">Follow Us</h4>
           <div className="flex flex-wrap gap-4">
-            {socialLinks.map(({ label, href, icon: Icon, color }) => (
+            {socialLinks.map(({ label, link, icon: Icon, color }) => (
               <Link
                 key={label}
-                href={href}
+                href={link}
                 aria-label={label}
                 className="transition-transform duration-200 hover:scale-110"
               >
