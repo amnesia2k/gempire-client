@@ -36,7 +36,7 @@ export default function ProductPage() {
     },
     offers: {
       "@type": "Offer",
-      url: `https://store.olatilewa.dev/product/${product.slug}`,
+      url: `https://gempire.vercel.app/product/${product.slug}`,
       priceCurrency: "NGN",
       price: product.price,
       itemCondition: "https://schema.org/NewCondition",

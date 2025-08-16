@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://store.olatilewa.dev/contact</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev/privacy-policy</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev/tos</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev/cart</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev/products</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://store.olatilewa.dev/success</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/contact</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/privacy-policy</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/tos</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/cart</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/products</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://gempire.vercel.app/success</loc><lastmod>2025-07-14T09:55:30.960Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 </urlset>

@@ -38,8 +38,8 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 name: "Gempire",
-                url: "https://store.olatilewa.dev",
-                logo: "https://store.olatilewa.dev/gempire-meta.jpeg",
+                url: "https://gempire.vercel.app",
+                logo: "https://gempire.vercel.app/gempire-meta.jpeg",
                 sameAs: [
                   "https://instagram.com/gempire.ng",
                   "https://facebook.com/gempire.ng",
