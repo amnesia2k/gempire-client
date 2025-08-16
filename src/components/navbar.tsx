@@ -134,10 +134,14 @@ export default function Navbar() {
               className="bg-background fixed top-0 right-0 z-50 h-full w-64 px-6 py-6 shadow-lg lg:hidden dark:bg-black"
             >
               {/* Top row: close */}
-              <div className="mb-8 flex justify-end">
+              <div className="mb-8 flex items-center justify-between">
+                <CartIcon variant="outline" />
+
+                {/* <div className="flex justify-end"> */}
                 <button onClick={closeMobileSidebar} className="cursor-pointer">
                   <X className="h-6 w-6" />
                 </button>
+                {/* </div> */}
               </div>
 
               {/* Nav links */}
