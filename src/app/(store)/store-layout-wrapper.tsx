@@ -42,7 +42,9 @@ export default function StoreLayoutWrapper({ children }: Props) {
       </div>
 
       {/* 👇 Centered content with padding */}
-      <main className="mx-auto w-full max-w-7xl flex-grow">{children}</main>
+      <main className="mx-auto w-full max-w-7xl flex-grow pt-[100px]">
+        {children}
+      </main>
 
       <Separator className="my-5" />
       <Footer />
