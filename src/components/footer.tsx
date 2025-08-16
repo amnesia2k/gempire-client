@@ -26,20 +26,21 @@ const legalLinks = [
 
 // ✨ React Icons-based socials
 const socialLinks = [
-  // { label: "Facebook", icon: FaFacebookF, color: "#1877F2" },
-  {
-    label: "Instagram",
-    icon: SiInstagram,
-    color: "#E4405F",
-    link: "https://www.instagram.com/_gempire?igsh=d252dGtwNGQ2YjYx&utm_source=qr",
-  },
-
   // { label: "X", icon: FaXTwitter, color: "#000000" },
+  // { label: "Facebook", icon: FaFacebookF, color: "#1877F2" },
+
   {
     label: "WhatsApp",
     icon: SiWhatsapp,
     color: "#25D366",
     link: "https://wa.me/2348133769036",
+  },
+
+  {
+    label: "Instagram",
+    icon: SiInstagram,
+    color: "#E4405F",
+    link: "https://www.instagram.com/_gempire?igsh=d252dGtwNGQ2YjYx&utm_source=qr",
   },
 
   {
@@ -97,7 +98,7 @@ export default function Footer() {
 
         {/* Column 3: Social */}
         <div>
-          <h4 className="mb-4 font-semibold">Follow Us</h4>
+          <h4 className="mb-4 font-semibold">Contact Us</h4>
           <div className="flex flex-wrap gap-4">
             {socialLinks.map(({ label, link, icon: Icon, color }) => (
               <Link
