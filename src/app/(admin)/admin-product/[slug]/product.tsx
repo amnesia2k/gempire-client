@@ -76,7 +76,7 @@ export default function Product() {
   const [qriousScriptLoaded, setQriousScriptLoaded] = useState(false); // Renamed for clarity
 
   const productLink = data
-    ? `https://store.olatilewa.dev/product/${data.slug}`
+    ? `https://gempire.vercel.app/product/${data.slug}`
     : "";
 
   const handleDeleteConfirmed = () => {

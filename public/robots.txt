@@ -13,7 +13,7 @@ Disallow: /admin-product/*
 Disallow: /dash-access
 
 # Host
-Host: https://store.olatilewa.dev
+Host: https://gempire.vercel.app
 
 # Sitemaps
-Sitemap: https://store.olatilewa.dev/sitemap.xml
+Sitemap: https://gempire.vercel.app/sitemap.xml

@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: "https://store.olatilewa.dev",
+  siteUrl: "https://gempire.vercel.app",
   generateRobotsTxt: true,
   sitemapSize: 5000,
   changefreq: "weekly",

@@ -56,7 +56,7 @@ export function generateMeta({
   title,
   description,
   image = fallbackImage,
-  url = "https://store.olatilewa.dev",
+  url = "https://gempire.vercel.app",
   canonicalPath = "/",
 }: Options): Metadata {
   const fullUrl = `${url.replace(/\/$/, "")}${canonicalPath}`;
