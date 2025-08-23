@@ -107,7 +107,7 @@ export default function Product() {
 
   // Reorder: Declare generateFallbackQR first
   const generateFallbackQR = useCallback((text: string) => {
-    console.log("generateFallbackQR called with text:", text);
+    // console.log("generateFallbackQR called with text:", text);
     const img = qrImageRef.current;
     if (!img) {
       console.error(
@@ -123,7 +123,7 @@ export default function Product() {
     img.style.maxWidth = "300px";
 
     img.onload = () => {
-      console.log("Fallback QR image loaded successfully.");
+      // console.log("Fallback QR image loaded successfully.");
       setQrCodeDataUrl(img.src);
     };
     img.onerror = () => {
@@ -141,7 +141,7 @@ export default function Product() {
   // Now createQR can safely reference generateFallbackQR
   const createQR = useCallback(
     (text: string) => {
-      console.log("createQR called with text:", text);
+      // console.log("createQR called with text:", text);
       const canvas = qrCanvasRef.current;
       if (!canvas) {
         console.error(
@@ -152,7 +152,7 @@ export default function Product() {
 
       try {
         if (typeof window.QRious === "function") {
-          console.log("QRious is available. Attempting to create QR...");
+          // console.log("QRious is available. Attempting to create QR...");
           new window.QRious({
             element: canvas,
             value: text,
@@ -165,7 +165,7 @@ export default function Product() {
           canvas.style.maxWidth = "300px";
           const dataUrl = canvas.toDataURL("image/png");
           setQrCodeDataUrl(dataUrl);
-          console.log("QR code created successfully via QRious.");
+          // console.log("QR code created successfully via QRious.");
         } else {
           console.warn(
             "QRious not available in createQR path. This shouldn't happen.",
@@ -183,12 +183,12 @@ export default function Product() {
 
   const loadQriousScript = useCallback(() => {
     if (!qriousScriptLoaded && !window.QRious) {
-      console.log("QRious script not found and not loaded, appending to head.");
+      // console.log("QRious script not found and not loaded, appending to head.");
       const script = document.createElement("script");
       script.src =
         "https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js";
       script.onload = () => {
-        console.log("QRious script loaded successfully.");
+        // console.log("QRious script loaded successfully.");
         setQriousScriptLoaded(true); // Mark as loaded
       };
       script.onerror = () => {
@@ -200,7 +200,7 @@ export default function Product() {
       };
       document.head.appendChild(script);
     } else {
-      console.log("QRious script already loaded or initiated.");
+      // console.log("QRious script already loaded or initiated.");
       setQriousScriptLoaded(typeof window.QRious === "function"); // Verify if it's truly available
     }
   }, [qriousScriptLoaded]);
@@ -208,7 +208,7 @@ export default function Product() {
   // EFFECT 1: When dialog opens, initialize state and trigger script loading
   useEffect(() => {
     if (openQrDialog) {
-      console.log("QR Dialog opened. Initializing QR process.");
+      // console.log("QR Dialog opened. Initializing QR process.");
       setQrCodeDataUrl(null); // Clear previous QR data
       setQrElementType(null); // Clear previous element type to show loading
       loadQriousScript(); // Start loading script
@@ -216,7 +216,7 @@ export default function Product() {
       // Clean up when dialog closes
       setQrCodeDataUrl(null);
       setQrElementType(null);
-      console.log("QR Dialog closed. Cleaning up.");
+      // console.log("QR Dialog closed. Cleaning up.");
     }
   }, [openQrDialog, loadQriousScript]);
 
@@ -242,15 +242,15 @@ export default function Product() {
 
     // Update element type if needed
     if (qrElementType !== targetElementType) {
-      console.log(`Setting qrElementType to: ${targetElementType}`);
+      // console.log(`Setting qrElementType to: ${targetElementType}`);
       setQrElementType(targetElementType);
       return; // Let the next render cycle handle the generation
     }
 
     // Generate QR code if element type is already correct and refs are available
-    console.log(
-      `qrElementType is already ${targetElementType}. Proceeding with generation.`,
-    );
+    // console.log(
+    //   `qrElementType is already ${targetElementType}. Proceeding with generation.`,
+    // );
 
     // Add a small delay to ensure the canvas/img element is properly mounted
     const generateQR = () => {

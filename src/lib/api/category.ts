@@ -29,8 +29,8 @@ export const createCategory = async (name: string) => {
 
 export const getCategoryBySlug = async (
   slug: string,
-  page = 1,
-  limit = 12,
+  page: number,
+  limit: number,
 ): Promise<CategoryWithProducts> => {
   const res = await api.get<GetCategoryResponse>(
     `/category/${slug}?page=${page}&limit=${limit}`,

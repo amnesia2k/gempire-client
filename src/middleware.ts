@@ -19,7 +19,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/admin-order")
   ) {
     if (!token) {
-      console.log("No token found, redirecting...");
+      // console.log("No token found, redirecting...");
       return NextResponse.redirect(new URL("/dash-access", req.url));
     }
   }
@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
   // 🛡️ admin with token can't route to /dash-access
   if (pathname.startsWith("/dash-access")) {
     if (token) {
-      console.log("Token found, redirecting to dashboard...");
+      // console.log("Token found, redirecting to dashboard...");
       return NextResponse.redirect(new URL("/admin-dashboard", req.url));
     }
   }

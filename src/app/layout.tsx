@@ -5,13 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import Script from "next/script";
 
-import {
-  // DM_Serif_Display,
-  // Gloock,
-  // Macondo,
-  Quicksand,
-  // Zain,
-} from "next/font/google";
+import { Quicksand } from "next/font/google";
 
 const quicksand = Quicksand({
   weight: "500",
@@ -25,7 +19,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${quicksand.className}`}
+        // className={`${quicksand.className}`}
         suppressHydrationWarning
       >
         <head>

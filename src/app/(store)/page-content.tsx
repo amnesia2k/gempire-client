@@ -8,8 +8,8 @@ export default function PageContent() {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  const prod = products?.data ?? [];
-  console.log("Products:", prod);
+  const prod = (products?.data ?? []).slice(0, 20);
+  // console.log("Products:", prod);
 
   if (!prod || prod.length === 0) {
     return <div>No products found</div>;
