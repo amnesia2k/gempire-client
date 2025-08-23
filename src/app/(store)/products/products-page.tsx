@@ -19,6 +19,7 @@ export default function ProductsPage() {
   const { data: categoryData, error } = useCategoryBySlug(
     selectedCategory,
     currentPage,
+    20,
   );
 
   const handlePageChange = (newPage: number) => {
@@ -31,6 +32,8 @@ export default function ProductsPage() {
 
   const products = categoryData?.products ?? [];
   const totalPages = categoryData?.totalPages ?? 1;
+
+  // console.log("Total Page:", totalPages);
 
   return (
     <div className="space-y-5">

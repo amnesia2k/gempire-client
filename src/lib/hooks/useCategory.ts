@@ -46,8 +46,8 @@ export const useCategoriesWithAll = () => {
 
 export const useCategoryBySlug = (
   slug: string | undefined,
-  page = 1,
-  limit = 12,
+  page: number,
+  limit: number,
 ) => {
   return useQuery<CategoryWithProducts>({
     queryKey: slug ? queryKeys.category(slug, page, limit) : [],

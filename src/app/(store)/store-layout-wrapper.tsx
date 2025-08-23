@@ -23,6 +23,7 @@ export default function StoreLayoutWrapper({ children }: Props) {
   const { data: c, isLoading: cc } = useCategoryBySlug(
     selectedCategory,
     currentPage,
+    20,
   );
 
   if (pp || !p || cc || !c) {

@@ -23,7 +23,7 @@ export const createPromoCode = async (
 // Get all promo codes (admin)
 export const getAllPromoCodes = async (): Promise<GetAllPromoCodesResponse> => {
   const res = await api.get<GetAllPromoCodesResponse>("/code");
-  console.log("API Response:", res.data);
+  // console.log("API Response:", res.data);
 
   if (res.data?.success) {
     return res.data;

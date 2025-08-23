@@ -24,14 +24,15 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
       <AnimatePresence>
         {viewingLargeImage && (
           <>
-            {/* Backdrop and center modal */}
+            {/* Backdrop */}
             <motion.div
               key="modal-wrapper"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-md backdrop-brightness-75"
+              className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-black/30 backdrop-blur-md backdrop-brightness-75"
+              onClick={() => setViewingLargeImage(false)} // ✅ closes on backdrop click
             >
               <motion.div
                 key="modal-content"
@@ -40,6 +41,7 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.25, ease: "easeInOut" }}
                 className="relative p-4"
+                onClick={(e) => e.stopPropagation()} // ✅ prevents closing when clicking image
               >
                 {imageUrl && (
                   <Image
@@ -53,7 +55,7 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
               </motion.div>
             </motion.div>
 
-            {/* Fixed Close Button (top-right of screen, not the modal) */}
+            {/* Fixed Close Button */}
             <motion.button
               key="close-button"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -85,7 +87,7 @@ export default function ProductImages({ images, alt }: ProductImagesProps) {
               alt={`${alt} thumbnail ${index + 1}`}
               width={200}
               height={200}
-              className="h-full w-full object-cover"
+              className="h-full w-full cursor-pointer object-cover"
             />
           </button>
         ))}

@@ -11,8 +11,8 @@ export default function PromoTable() {
 
   const promos = data?.data ?? [];
 
-  console.log("API Raw:", data);
-  console.log("Extracted Promos:", promos);
+  // console.log("API Raw:", data);
+  // console.log("Extracted Promos:", promos);
 
   return (
     <div>
