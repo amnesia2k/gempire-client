@@ -19,7 +19,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        // className={`${quicksand.className}`}
+        className={`${quicksand.className}`}
         suppressHydrationWarning
       >
         <head>
