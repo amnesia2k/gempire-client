@@ -27,7 +27,7 @@ export const createOrder = async (
 
 // 📦 Get all orders (for admin order table)
 export const getAllOrders = async (): Promise<Order[]> => {
-  const res = await api.get<GetOrdersResponse>("/orders");
+  const res = await api.get<GetOrdersResponse>("/order/all");
 
   if (res.data?.success) {
     return res.data.data;
