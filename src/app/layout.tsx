@@ -7,10 +7,10 @@ import Script from "next/script";
 
 import { Quicksand } from "next/font/google";
 
-const quicksand = Quicksand({
-  weight: "500",
-  subsets: ["latin"],
-});
+// const quicksand = Quicksand({
+//   weight: "500",
+//   subsets: ["latin"],
+// });
 
 export default function RootLayout({
   children,
@@ -19,7 +19,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        className={`${quicksand.className}`}
+        // className={`${quicksand.className}`}
         suppressHydrationWarning
       >
         <head>
