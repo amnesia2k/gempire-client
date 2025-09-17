@@ -7,6 +7,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import type { PromoCode } from "@/lib/types";
 import { usePromoCodes } from "@/lib/hooks/usePromo";
+import Link from "next/link";
 
 export default function PromoBanner() {
   const [currentPromo, setCurrentPromo] = useState(0);
@@ -63,7 +64,7 @@ export default function PromoBanner() {
         )}
 
         <Button className="rounded-full">
-          {promo.ctaText}
+          <Link href="/products">{promo.ctaText}</Link>
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
 
