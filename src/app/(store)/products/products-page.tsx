@@ -6,7 +6,7 @@ import { CategoryFilter } from "@/components/category-filter";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { CategoryFilterSkeleton } from "@/components/category-filter-skeleton";
 
 export default function ProductsPage() {
@@ -14,13 +14,27 @@ export default function ProductsPage() {
   const router = useRouter();
 
   const selectedCategory = searchParams.get("category") ?? "all";
-  const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
+  const rawPage = parseInt(searchParams.get("page") ?? "1", 10);
 
-  const { data: categoryData, error } = useCategoryBySlug(
-    selectedCategory,
-    currentPage,
-    20,
-  );
+  // 🧹 sanitize page immediately
+  const currentPage = Number.isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
+
+  const {
+    data: categoryData,
+    error,
+    isLoading,
+  } = useCategoryBySlug(selectedCategory, currentPage, 20);
+
+  const totalPages = categoryData?.totalPages ?? 1;
+
+  // 🪄 clamp page if it's out of range
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      const params = new URLSearchParams(Array.from(searchParams.entries()));
+      params.set("page", "1");
+      router.replace(`?${params.toString()}`);
+    }
+  }, [currentPage, totalPages, searchParams, router]);
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
@@ -31,9 +45,6 @@ export default function ProductsPage() {
   if (error) return <div>Error: {error.message}</div>;
 
   const products = categoryData?.products ?? [];
-  const totalPages = categoryData?.totalPages ?? 1;
-
-  // console.log("Total Page:", totalPages);
 
   return (
     <div className="space-y-5">
@@ -41,6 +52,7 @@ export default function ProductsPage() {
         <Suspense fallback={<CategoryFilterSkeleton />}>
           <CategoryFilter />
         </Suspense>
+
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -66,7 +78,9 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {products.length === 0 ? (
+      {isLoading ? (
+        <div className="text-muted-foreground text-center">Loading...</div>
+      ) : products.length === 0 ? (
         <div className="text-muted-foreground text-center">
           No products found in this category
         </div>

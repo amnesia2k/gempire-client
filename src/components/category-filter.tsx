@@ -21,14 +21,16 @@ export function CategoryFilter() {
   useEffect(() => {
     if (!selected && categories && categories.length > 0) {
       const params = new URLSearchParams(Array.from(searchParams.entries()));
-      params.set("category", "all"); // explicitly set "all"
-      router.replace(`?${params.toString()}`); // shallow replace to avoid stacking history
+      params.set("category", "all");
+      params.set("page", "1"); // reset page
+      router.replace(`?${params.toString()}`);
     }
   }, [selected, categories, searchParams, router]);
 
   const handleChange = (slug: string) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.set("category", slug);
+    params.set("page", "1"); // 🔥 always reset page on category change
     router.push(`?${params.toString()}`);
   };
 
