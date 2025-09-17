@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Quicksand } from "next/font/google";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
           >
             <Toaster position="top-center" richColors closeButton />
             <Analytics />
+            <SpeedInsights />
             {children}
           </ThemeProvider>
         </body>
