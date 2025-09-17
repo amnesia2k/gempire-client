@@ -15,10 +15,10 @@ const navLinks = [
   { id: 3, title: "Contact", to: "contact" },
 ];
 
-const macondo = Macondo({
-  weight: "400",
-  subsets: ["latin"],
-});
+// const macondo = Macondo({
+//   weight: "400",
+//   subsets: ["latin"],
+// });
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -54,7 +54,8 @@ export default function Navbar() {
     <>
       {/* Desktop Navbar (centered pill) */}
       <nav className="bg-background/80 fixed top-6 left-1/2 z-50 hidden w-[850px] -translate-x-1/2 transform items-center justify-between rounded-full border border-gray-200 px-8 py-4 shadow-lg backdrop-blur-xl lg:flex dark:border-gray-800">
-        <Link href="/" className={`text-3xl font-bold ${macondo.className}`}>
+        <Link href="/" className={`text-3xl font-bold`}>
+          {/* ${macondo.className} */}
           Gempire
         </Link>
 
@@ -86,7 +87,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className={`text-3xl font-bold ${macondo.className}`}
+            className={`text-3xl font-bold`}
+            // ${macondo.className}
             onClick={closeMobileSidebar}
           >
             Gempire
