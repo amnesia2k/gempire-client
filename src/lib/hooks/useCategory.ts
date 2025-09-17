@@ -8,6 +8,7 @@ import {
 } from "../api/category";
 import type { Category, CategoryWithProducts } from "../types";
 import { queryKeys } from "../query-keys";
+import { getAllProducts } from "../api/product";
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
@@ -51,7 +52,24 @@ export const useCategoryBySlug = (
 ) => {
   return useQuery<CategoryWithProducts>({
     queryKey: slug ? queryKeys.category(slug, page, limit) : [],
-    queryFn: () => getCategoryBySlug(slug!, page, limit),
+    queryFn: async () => {
+      if (slug === "all") {
+        // ✅ Adapt getAllProducts result to match CategoryWithProducts type
+        const res = await getAllProducts();
+
+        return {
+          _id: "all",
+          name: "All Products",
+          slug: "all",
+          products: res.data.slice((page - 1) * limit, page * limit), // manual pagination
+          total: res.data.length,
+          page,
+          totalPages: Math.ceil(res.data.length / limit),
+        } satisfies CategoryWithProducts;
+      }
+
+      return getCategoryBySlug(slug!, page, limit);
+    },
     enabled: !!slug,
     staleTime: 600_000,
   });
