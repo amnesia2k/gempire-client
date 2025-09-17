@@ -7,7 +7,7 @@ import type {
 } from "../types";
 
 export const getAllProducts = async (): Promise<GetAllProductsResponse> => {
-  const res = await api.get<GetAllProductsResponse>("/products");
+  const res = await api.get<GetAllProductsResponse>("/product/all");
 
   if (res.data?.success) {
     return res.data;

@@ -2,7 +2,7 @@ import { api } from "../axios";
 import type { AdminResponse, LoginResponse, LogoutResponse } from "../types";
 
 export const loginAdmin = async ({ code }: { code: string }) => {
-  const res = await api.post<LoginResponse>("/login", { code });
+  const res = await api.post<LoginResponse>("/admin/login", { code });
 
   if (res.data?.success) {
     return res.data;
@@ -12,7 +12,7 @@ export const loginAdmin = async ({ code }: { code: string }) => {
 };
 
 export const logoutAdmin = async () => {
-  const res = await api.post<LogoutResponse>("/logout");
+  const res = await api.post<LogoutResponse>("/admin/logout");
 
   if (res.data?.success) {
     return res.data;
@@ -22,7 +22,7 @@ export const logoutAdmin = async () => {
 };
 
 export const getAdmin = async () => {
-  const res = await api.get<AdminResponse>("/admin");
+  const res = await api.get<AdminResponse>("/admin/me");
 
   if (res.data?.success) {
     return res.data.data;

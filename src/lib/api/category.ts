@@ -8,7 +8,7 @@ import type {
 } from "../types";
 
 export const getAllCategories = async (): Promise<Category[]> => {
-  const res = await api.get<GetCategoriesResponse>("/categories");
+  const res = await api.get<GetCategoriesResponse>("/category/all");
 
   if (res.data?.success) {
     return res.data.data;

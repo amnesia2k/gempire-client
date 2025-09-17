@@ -15,7 +15,7 @@ export const getDashboardMetrics = async (): Promise<DashboardResponse> => {
 export const getSalesData = async (
   period: "month" | "week" | "day" = "month",
 ): Promise<SalesDataResponse> => {
-  const res = await api.get<SalesDataResponse>("/sales", {
+  const res = await api.get<SalesDataResponse>("/metrics/sales", {
     params: { period },
   });
 

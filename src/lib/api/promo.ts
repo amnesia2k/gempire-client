@@ -11,7 +11,7 @@ import type {
 export const createPromoCode = async (
   data: Partial<PromoCode>,
 ): Promise<CreatePromoCodeResponse> => {
-  const res = await api.post<CreatePromoCodeResponse>("/code", data);
+  const res = await api.post<CreatePromoCodeResponse>("/promo", data);
 
   if (res.data?.success) {
     return res.data;
@@ -22,7 +22,7 @@ export const createPromoCode = async (
 
 // Get all promo codes (admin)
 export const getAllPromoCodes = async (): Promise<GetAllPromoCodesResponse> => {
-  const res = await api.get<GetAllPromoCodesResponse>("/code");
+  const res = await api.get<GetAllPromoCodesResponse>("/promo/all");
   // console.log("API Response:", res.data);
 
   if (res.data?.success) {
@@ -36,7 +36,7 @@ export const getAllPromoCodes = async (): Promise<GetAllPromoCodesResponse> => {
 export const getPromoCodeById = async (
   id: string,
 ): Promise<GetPromoCodeResponse> => {
-  const res = await api.get<GetPromoCodeResponse>(`/code/${id}`);
+  const res = await api.get<GetPromoCodeResponse>(`/promo/${id}`);
 
   if (res.data?.success) {
     return res.data;
@@ -49,7 +49,7 @@ export const getPromoCodeById = async (
 export const getPromoCodeByCode = async (
   code: string,
 ): Promise<GetPromoCodeResponse> => {
-  const res = await api.get<GetPromoCodeResponse>(`/code/string/${code}`);
+  const res = await api.get<GetPromoCodeResponse>(`/promo/code/${code}`);
 
   if (res.data?.success) {
     return res.data;
@@ -63,7 +63,7 @@ export const updatePromoCode = async (
   id: string,
   updates: Partial<PromoCode>,
 ): Promise<UpdatePromoCodeResponse> => {
-  const res = await api.patch<UpdatePromoCodeResponse>(`/code/${id}`, updates);
+  const res = await api.patch<UpdatePromoCodeResponse>(`/promo/${id}`, updates);
 
   if (res.data?.success) {
     return res.data;
