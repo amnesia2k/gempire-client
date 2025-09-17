@@ -4,13 +4,14 @@ import { QueryProvider } from "./utils/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 import { Quicksand } from "next/font/google";
 
-// const quicksand = Quicksand({
-//   weight: "500",
-//   subsets: ["latin"],
-// });
+const quicksand = Quicksand({
+  weight: "500",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
@@ -19,7 +20,7 @@ export default function RootLayout({
     <QueryProvider>
       <html
         lang="en"
-        // className={`${quicksand.className}`}
+        className={`${quicksand.className}`}
         suppressHydrationWarning
       >
         <head>
@@ -50,6 +51,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster position="top-center" richColors closeButton />
+            <Analytics />
             {children}
           </ThemeProvider>
         </body>
