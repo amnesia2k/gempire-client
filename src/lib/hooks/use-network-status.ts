@@ -36,6 +36,7 @@ export default function useNetworkStatus() {
         setIsServerUp(false);
       }
     } catch (err) {
+      console.log("Error:", err);
       setIsServerUp(false);
     } finally {
       setLastChecked(new Date());

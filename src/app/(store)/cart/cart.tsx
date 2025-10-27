@@ -42,10 +42,7 @@ export default function CartCheckoutPage() {
       toast.error("Please enter a promo code.");
       return;
     }
-    if (
-      appliedPromoCode &&
-      appliedPromoCode.code === promoCodeInput.toUpperCase()
-    ) {
+    if (appliedPromoCode?.code === promoCodeInput.toUpperCase()) {
       toast.info("This promo code is already applied.");
       return;
     }
