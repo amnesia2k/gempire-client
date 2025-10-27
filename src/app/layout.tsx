@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Quicksand } from "next/font/google";
+import StatusWrapper from "@/components/status-wrapper";
 
 const quicksand = Quicksand({
   weight: "500",
@@ -51,10 +52,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Toaster position="top-center" richColors closeButton />
-            <Analytics />
-            <SpeedInsights />
-            {children}
+            <StatusWrapper>
+              <Toaster position="top-center" richColors closeButton />
+              <Analytics />
+              <SpeedInsights />
+              {children}
+            </StatusWrapper>
           </ThemeProvider>
         </body>
       </html>
