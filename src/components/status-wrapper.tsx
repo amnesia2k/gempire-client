@@ -23,17 +23,17 @@ export default function StatusWrapper({
     );
   }
 
-  if (!isServerUp) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center gap-5 text-center">
-        <ServerCrash className="h-20 w-20 text-red-500" />
-        <h1 className="text-2xl font-bold">Server is down</h1>
-        <p className="mt-2 text-gray-500">
-          We’re having trouble connecting to the server. Please try again later.
-        </p>
-      </div>
-    );
-  }
+  // if (!isServerUp) {
+  //   return (
+  //     <div className="flex h-screen flex-col items-center justify-center gap-5 text-center">
+  //       <ServerCrash className="h-20 w-20 text-red-500" />
+  //       <h1 className="text-2xl font-bold">Server is down</h1>
+  //       <p className="mt-2 text-gray-500">
+  //         We’re having trouble connecting to the server. Please try again later.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   // Otherwise, render the app normally
   return <>{children}</>;
