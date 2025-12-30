@@ -7,7 +7,13 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    remotePatterns: [new URL("https://res.cloudinary.com/dszmrtmyk/image/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dszmrtmyk/image/**",
+      },
+    ],
   },
 };
 
